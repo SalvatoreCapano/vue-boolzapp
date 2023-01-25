@@ -5,6 +5,17 @@
     box-sizing: border-box;
 }
 
+body {
+    font-family: 'Noto Sans', sans-serif;
+}
+
+:root {
+    --myMainColor: #eaeaea;
+    --myMainColorDark: #cec7c7;
+    --myLightBlue: #8edafc;
+    --mySecondaryColor: #009688;
+}
+
 /* REGOLE GENERALI */
 .wrapper {
     height: 100vh;
@@ -13,6 +24,20 @@
     background-size: cover;
 
     padding: 2.5rem 0;
+}
+
+.userPicture {
+    width: 55px;
+    height: 55px;
+
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.userPicture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* MAIN */
@@ -49,29 +74,42 @@ main > .chatPanel {
     height: 80px;
     flex-shrink: 0;
 
-    background-color: cadetblue;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0.6rem;
+    border-right: 2px solid var(--myMainColorDark);
+
+    background-color: var(--myMainColor);
 }
 
 .sidebar .notificationsBanner {
-    height: 90px;
+    height: 85px;
     flex-shrink: 0;
 
-    background-color: lightblue;
+    padding: 0.6rem;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    background-color: var(--myLightBlue);
 }
 
-.sidebar .searchBar {
-    height: 50px;
+.sidebar .searchBarContainer {
     flex-shrink: 0;
 
-    background-color: lavender;
+    padding: 6px;
+
+    background-color: var(--myMainColor);
 }
 
 .sidebar .chatList {
     flex-grow: 1;
-
     overflow-y: auto;
 
-    background-color: lightpink;
+    background-color: rgb(243, 243, 243);
 }
 
 /* CHAT PANEL */
@@ -79,19 +117,246 @@ main > .chatPanel {
     height: 80px;
     flex-shrink: 0;
 
-    background-color: thistle;
+    background-color: var(--myMainColor);
 }
 
 .chatPanel .chatContent {
     flex-grow: 1;
 
     overflow-y: auto;
-    background-color: goldenrod;
+    background-color: lightsteelblue;
 }
 
 .chatPanel .chatInput {
     height: 80px;
     flex-shrink: 0;
 
-    background-color: blanchedalmond;
+    background-color: var(--myMainColor);
+}
+
+/* SIDEBAR 1/4 */
+.sidebar .sidebarMenu .userInfo a{
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    text-decoration: none;
+    color: black;
+}
+
+/* Regole applicate anche alle icone nell'header della chat */
+.navbar ul {
+    list-style: none;
+
+    display: flex;
+    gap: 0.6rem;
+}
+
+.navbar ul li a {
+    padding: 5px 8px;
+}
+
+.navbar ul li a button {
+    background: none;
+    border: none;
+
+    font-size: 1.25rem;
+    color: rgb(89, 89, 89);
+    
+    cursor: pointer;
+    transition: color 0.05s;
+}
+
+.navbar ul li a:hover button{
+    color: gray;
+}
+
+/* SIDEBAR 2/4 */
+.sidebar .notificationsBanner .notificationBannerIcon {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    
+    text-align: center;
+    line-height: 50px;
+    color: var(--myLightBlue);
+    
+    border-radius: 50%;
+    background-color: white;
+}
+
+.sidebar .notificationsBanner .textContainer {
+    display: inline-block;
+}
+
+.sidebar .notificationsBanner .textContainer span {
+    display: block;
+}
+
+.sidebar .notificationsBanner .textContainer button {
+    background: none;
+    border: none;
+
+    font-size: 0.8rem;
+    color: gray;
+    text-decoration: underline;
+
+    cursor: pointer;
+}
+
+/* SIDEBAR 3/4 */
+.sidebar .searchBarContainer .searchBar {
+    display: flex;
+    align-items: center;
+    
+    border-radius: 6px;
+    border: 1px solid #e1e1e1;
+    background-color: white;
+}
+
+.sidebar .searchBarContainer .searchBar span {
+    margin: 0 20px;
+
+    color: gray;
+}
+
+.sidebar .searchBarContainer .searchBar input {
+    padding: 8px 3px;
+    flex-grow: 1;
+
+    background: none;
+    border: none;
+}
+
+.sidebar .searchBarContainer .searchBar input:focus {
+    outline: none;
+}
+
+/* SIDEBAR 4/4 */
+.sidebar .chatList ul {
+    list-style: none;
+
+    padding: 0.5rem 0;
+}
+
+.sidebar .chatList ul li {
+    height: 80px;
+    
+    padding: 0.4rem 0.4rem 0.4rem 0.6rem;
+    border-bottom: 1px solid rgb(200, 200, 200);
+
+    display: flex;
+    align-items: center;
+
+    user-select: none;
+    cursor: pointer;
+}
+
+.sidebar .chatList ul li:hover {
+    background-color: rgb(220, 220, 220);
+}
+
+.sidebar .chatList ul li .iconContainer {
+    margin-right: 0.4rem;
+}
+
+.sidebar .chatList ul li .chatInfo {
+    height: 50px;
+    flex-grow: 1;
+
+    overflow: hidden;
+}
+
+.sidebar .chatList ul li .chatInfo .contactName {
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.sidebar .chatList ul li .chatInfo .lastMsgPreview {
+    font-size: 0.8rem;
+    color: gray;
+
+    overflow: hidden;
+}
+
+.sidebar .chatList ul li .timeContainer {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: gray;
+
+    align-self: flex-start;
+
+    padding: 0 4px;
+}
+
+/* CHAT PANEL 1/3 */
+.chatPanel .chatHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 0 0.6rem;
+}
+
+.chatPanel .chatHeader .headerChatInfo a {
+    display: flex;
+    align-items: center;
+
+    text-decoration: none;
+}
+
+.chatPanel .chatHeader .headerChatInfo .chatInfo {
+    margin-left: 0.6rem;
+}
+
+.chatPanel .chatHeader .headerChatInfo .chatInfo h4 {
+    color: black;
+}
+
+.chatPanel .chatHeader .headerChatInfo .chatInfo .lastAccess {
+    font-size: 0.8rem;
+    color: gray;
+}
+
+/* CHAT PANEL 3/3 */
+.chatPanel .chatInput {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 16px;
+
+    padding: 10px 16px;
+}
+
+.chatPanel .chatInput button {
+    padding: 0.6rem 0.9rem;
+
+    font-size: 1.6rem;
+    color: rgb(89, 89, 89);
+    
+    cursor: pointer;
+    transition: color 0.05s;
+
+    background: none;
+    border: none;
+}
+
+.chatPanel .chatInput button:hover {
+    color: gray;
+}
+
+.chatPanel .chatInput input {
+    flex-grow: 1;
+    height: 100%;
+
+    padding-left: 1rem;
+
+    background: none;
+    border: none;
+    border-radius: 8px;
+    background-color: white;
+}
+
+.chatPanel .chatInput input:focus {
+    outline: 2px solid var(--mySecondaryColor);
 }
