@@ -170,7 +170,8 @@ createApp({
                 }
                 ],
             currentMessagesList: 0,
-            currentActiveChat : -1
+            currentActiveChat : -1,
+            currentMessage: ""
         };
     },
 
@@ -216,9 +217,38 @@ createApp({
             if (msg.status == "sent") return true;
             else return false;
         }, 
-        // setActive() {
-            
-        // }
+        getResponse() {
+            const date = new Date();
+            this.currentMessagesList.push(
+                {
+                    message: "OK!",
+                    status: 'received',
+                    newDate: {
+                        second: date.getSeconds(),
+                        minute: date.getMinutes(),
+                        hour: date.getHours()
+                    }
+                }
+            );
+        },
+        sendMessage() {
+            const date = new Date();
+            this.currentMessagesList.push(
+                {
+                    date: '10/01/2020 15:51:00',
+                    message: this.currentMessage,
+                    status: 'sent',
+                    newDate: {
+                        second: date.getSeconds(),
+                        minute: date.getMinutes(),
+                        hour: date.getHours()
+                    }
+                }
+            );
+            this.currentMessage = "";
+
+            setTimeout(this.getResponse, 1000);
+        }
     },
     
     beforeMount () {

@@ -11,8 +11,14 @@ Milestone 2
 messaggi relativi al contatto attivo all’interno del pannello della conversazione
 ● Click sul contatto mostra la conversazione del contatto cliccato
 
+Milestone 3
+● Aggiunta di un messaggio: l’utente scrive un testo nella parte bassa e digitando
+“enter” il testo viene aggiunto al thread sopra, come messaggio verde
+● Risposta dall’interlocutore: ad ogni inserimento di un messaggio, l’utente riceverà
+un “ok” come risposta, che apparirà dopo 1 secondo.
 
 
 <!-- Idee Bonus -->
 - favicon
 - invio allegati
+- scroll automatico all'invio di un messaggio
