@@ -86,7 +86,7 @@
 
                             <span><i class="fa-solid fa-magnifying-glass"></i></span>
 
-                            <input type="text" placeholder="Cerca o inizia una nuova chat">
+                            <input v-model="searchBarInput" type="text" placeholder="Cerca o inizia una nuova chat">
 
                         </div> <!-- /searchBar-->
 
@@ -97,7 +97,7 @@
 
                         <ul>
 
-                            <li v-for="(contact, index) in contacts" @click="openChat(contact, index)" :class="(index == currentActiveChat) ? ('active') : ('')">
+                            <li v-for="(contact, index) in contacts" @click="openChat(contact, index)" :class="(index == currentActiveChat) ? ('active') : ('')" v-show="showOnSearchBar(contact)">
                                 <div class="iconContainer">
 
                                     <div class="userPicture">

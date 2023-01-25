@@ -170,8 +170,9 @@ createApp({
                 }
                 ],
             currentMessagesList: 0,
-            currentActiveChat : -1,
-            currentMessage: ""
+            currentActiveChat: -1,
+            currentMessage: "",
+            searchBarInput: ""
         };
     },
 
@@ -248,6 +249,9 @@ createApp({
             this.currentMessage = "";
 
             setTimeout(this.getResponse, 1000);
+        },
+        showOnSearchBar(contact) {
+            if (contact.name.toLowerCase().includes(this.searchBarInput.toLowerCase())) return true;
         }
     },
     
