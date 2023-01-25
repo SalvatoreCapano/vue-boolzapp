@@ -168,7 +168,9 @@ createApp({
                         }
                     ],
                 }
-                ]
+                ],
+            currentMessagesList: 0,
+            currentActiveChat : -1
         };
     },
 
@@ -180,13 +182,10 @@ createApp({
             let lastMsgIndex = contact.messages.length - 1;
             return contact.messages[lastMsgIndex].message;
         },
-        deconstructTime () {
+        deconstructDate () {
             this.contacts.forEach(contact => {
 
-                // console.log(contact.messages);
-
                 contact.messages.forEach(msg => {
-                    // console.log(msg.date);
 
                     const temp = msg.date.split(" ");
 
@@ -201,19 +200,29 @@ createApp({
                         minute: timeArray[1],
                         second: timeArray[2]
                     }
-
-                    console.log(msg.newDate);
-
                 });
             });
-        }, getLastMsgTime (contact) {
+        }, 
+        getLastMsgTime (contact) {
             let lastMsgIndex = contact.messages.length - 1;
             return `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`
-        }
+        },
+        openChat (contact, i) {
+            this.currentMessagesList = contact.messages;
+
+            this.currentActiveChat = i;
+        },
+        checkMsgStatus(msg) {
+            if (msg.status == "sent") return true;
+            else return false;
+        }, 
+        // setActive() {
+            
+        // }
     },
     
     beforeMount () {
-        this.deconstructTime ();
+        this.deconstructDate ();
     }
 
 }).mount('#app');

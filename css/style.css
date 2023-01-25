@@ -269,7 +269,15 @@ main > .chatPanel {
 }
 
 .sidebar .chatList ul li:hover {
+    background-color: rgb(230, 230, 230);
+}
+
+.sidebar .chatList ul li.active {
     background-color: rgb(220, 220, 220);
+}
+
+.sidebar .chatList ul li.active:hover {
+    background-color: rgb(230, 230, 230);
 }
 
 .sidebar .chatList ul li .iconContainer {
