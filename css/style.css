@@ -14,6 +14,8 @@ body {
     --myMainColorDark: #cec7c7;
     --myLightBlue: #8edafc;
     --mySecondaryColor: #009688;
+    --sentMsg: #d5f9ba;
+    --receivedMsg: #fdfdfd;
 }
 
 /* REGOLE GENERALI */
@@ -49,7 +51,7 @@ main {
 
     display: flex;
     
-    box-shadow: 0px 5px 15px 3px #00000050;
+    box-shadow: 0px 5px 15px 3px #00000030;
 }
 
 main > .sidebar,
@@ -79,7 +81,6 @@ main > .chatPanel {
     align-items: center;
 
     padding: 0.6rem;
-    border-right: 2px solid var(--myMainColorDark);
 
     background-color: var(--myMainColor);
 }
@@ -123,8 +124,15 @@ main > .chatPanel {
 .chatPanel .chatContent {
     flex-grow: 1;
 
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 1rem;
+
+    padding: 1.5rem 3rem;
+
     overflow-y: auto;
-    background-color: lightsteelblue;
+    background-image: url("../img/mine.jpg");
 }
 
 .chatPanel .chatInput {
@@ -295,6 +303,8 @@ main > .chatPanel {
     justify-content: space-between;
     align-items: center;
 
+    border-left: 2px solid var(--myMainColorDark);
+
     padding: 0 0.6rem;
 }
 
@@ -318,12 +328,58 @@ main > .chatPanel {
     color: gray;
 }
 
+/* CHAT PANEL 2/3 */
+.chatPanel .chatContent .message {
+    max-width: 450px;
+    padding: 12px;
+    border-radius: 10px;
+
+    position: relative;
+}
+
+.message.sent {
+    align-self: flex-end;
+
+    background-color: var(--sentMsg);
+}
+
+.message.received {
+    align-self: flex-start;
+
+    background-color: var(--receivedMsg);
+}
+
+.message::after {
+    content: '';
+
+    position: absolute;
+    top: 0;
+    
+    width: 0; 
+    height: 0; 
+
+    border-left: 12px solid transparent;
+    border-right: 12px solid transparent;
+}
+
+.message.sent::after {
+    right: -10px;
+    border-top: 12px solid var(--sentMsg);
+}
+
+.message.message.received::after {
+    left: -10px;
+    border-top: 12px solid var(--receivedMsg);
+}
+
 /* CHAT PANEL 3/3 */
 .chatPanel .chatInput {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
     gap: 16px;
+
+    border-left: 2px solid var(--myMainColorDark);
 
     padding: 10px 16px;
 }
