@@ -28,6 +28,10 @@ body {
     padding: 2.5rem 0;
 }
 
+#app {
+    height: 100%;
+}
+
 .userPicture {
     width: 55px;
     height: 55px;
@@ -258,6 +262,10 @@ main > .chatPanel {
 
     user-select: none;
     cursor: pointer;
+}
+
+.sidebar .chatList ul li:last-child {
+    border-bottom: none;
 }
 
 .sidebar .chatList ul li:hover {
