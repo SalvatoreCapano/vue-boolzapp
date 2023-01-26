@@ -84,7 +84,7 @@ main > .chatPanel.closed {
 }
 
 /* SIDEBAR */
-.sidebar .sidebarMenu {
+.sidebar .sidebarHeader {
     height: 80px;
     flex-shrink: 0;
 
@@ -121,8 +121,9 @@ main > .chatPanel.closed {
 .sidebar .chatList {
     flex-grow: 1;
     overflow-y: auto;
+    overflow-x: hidden;
 
-    background-color: rgb(243, 243, 243);
+    background-color: #f3f3f3;
 }
 
 /* CHAT PANEL */
@@ -176,7 +177,7 @@ main > .chatPanel.closed {
 }
 
 /* SIDEBAR 1/4 */
-.sidebar .sidebarMenu .userInfo a{
+.sidebar .sidebarHeader .userInfo a{
     display: flex;
     align-items: center;
     gap: 0.75rem;
@@ -198,7 +199,7 @@ main > .chatPanel.closed {
     border: none;
     
     font-size: 1.25rem;
-    color: rgb(89, 89, 89);
+    color: #595959;
     
     padding: 5px 8px;
     cursor: pointer;
@@ -210,7 +211,7 @@ main > .chatPanel.closed {
 }
 
 /* SIDEBAR 2/4 */
-.sidebar .notificationsBanner .notificationBannerIcon {
+.sidebar .notificationsBanner .iconContainer {
     display: inline-block;
     width: 50px;
     height: 50px;
@@ -560,6 +561,17 @@ main > .chatPanel.closed {
     outline: 2px solid var(--mySecondaryColor);
 }
 
+
+
+
+
+
+
+
+
+
+
+
 /* VERSIONE MOBILE */
 @media screen and (max-width: 960px) {
 
@@ -590,11 +602,11 @@ main > .chatPanel.closed {
         width: 100% !important;
     }
 
-    main .sidebar .sidebarMenu {
+    main .sidebar .sidebarHeader {
         background-color: var(--mySecondaryColor);
     }
 
-    main .sidebar .sidebarMenu .navbar i{
+    main .sidebar .sidebarHeader .navbar i{
         color: white;
     }
 

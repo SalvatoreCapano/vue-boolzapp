@@ -28,18 +28,16 @@
 
                 <div class="sidebar" :class="(hideSidebar) ? ('hidden') : ('')">
 
-                    <div class="sidebarMenu">
+                    <div class="sidebarHeader">
 
                         <div class="userInfo">
 
                             <a href="">
-
                                 <div class="userPicture">
-                                    <img src="../img/avatar_1.jpg" alt="*Your username*">
+                                    <img src="../img/avatar_io.jpg" alt="*Your username*">
                                 </div> <!-- /userPicture-->
         
                                 <h4 class="userName">Sofia</h4>
-
                             </a>
 
                         </div> <!-- /userInfo-->
@@ -47,38 +45,32 @@
                         <nav class="navbar">
                             <ul>
                                 <li>
-                                    <a href="#">
-                                        <button><i class="fa-solid fa-circle-notch"></i></button>
-                                    </a>
+                                    <button><i class="fa-solid fa-circle-notch"></i></button>
                                 </li>
 
                                 <li>
-                                    <a href="#">
-                                        <button><i class="fa-solid fa-message"></i></button>
-                                    </a>
+                                    <button><i class="fa-solid fa-message"></i></button>
                                 </li>
 
                                 <li>
-                                    <a href="#">
-                                        <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                    </a>
+                                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
                                 </li>
                             </ul>
-                        </nav>
+                        </nav> <!-- /navbar-->
 
-                    </div> <!-- /sidebarMenu-->
+                    </div> <!-- /sidebarHeader-->
 
 
                     <div class="notificationsBanner">
 
-                        <span class="notificationBannerIcon">
+                        <span class="iconContainer">
                             <i class="fa-solid fa-bell-slash"></i>
-                        </span>
+                        </span> <!-- /iconContainer-->
 
                         <div class="textContainer">
                             <span>Ricevi notifiche di nuovi messaggi</span>
                             <button>Attiva notifiche per desktop</button>
-                        </div>
+                        </div> <!-- /textContainer-->
 
                     </div> <!-- /notificationsBanner-->
 
@@ -97,14 +89,12 @@
 
 
                     <div class="chatList">
-
                         <ul>
 
                             <li v-for="(contact, index) in contacts" 
                                 @click="openChat(contact, index), hideSidebar = true, hideChatPanel = false, clickedMessage = -1" 
-                                :class="(index == currentActiveChat) ? ('active') : ('')" 
-                                v-show="showOnSearchBar(contact)"
-                            >
+                                :class="(index == currentChatIndex) ? ('active') : ('')" 
+                                v-show="showOnSearchBar(contact)">
                                 <div class="iconContainer">
 
                                     <div class="userPicture">
@@ -131,13 +121,12 @@
                             </li>
 
                         </ul>
-                        
                     </div> <!-- /chatList-->
 
                 </div> <!-- /sidebar-->
 
 
-                <div class="chatPanel open"  v-if="currentActiveChat != -1" :class="(hideChatPanel) ? ('hidden') : ('')">
+                <div class="chatPanel open"  v-if="currentChatIndex != -1" :class="(hideChatPanel) ? ('hidden') : ('')">
 
                     <header class="chatHeader">
 
@@ -152,16 +141,16 @@
                                 <a href="">
     
                                     <div class="userPicture">
-                                        <img :alt="`${contacts[currentActiveChat].name}`" :src="`../img/avatar${contacts[currentActiveChat].avatar}.jpg`">
+                                        <img :alt="`${contacts[currentChatIndex].name}`" :src="`../img/avatar${contacts[currentChatIndex].avatar}.jpg`">
                                     </div> <!-- /userPicture-->
             
                                     <div class="chatInfo">
     
-                                        <h4 class="contactName">{{ contacts[currentActiveChat].name }}</h4>
+                                        <h4 class="contactName">{{ contacts[currentChatIndex].name }}</h4>
     
                                         <span class="accessStatus">
-                                            <span v-if="(currentActiveChat != -1) && (!isOnline)">
-                                                Ultimo accesso oggi alle {{ getLastMsgTime(contacts[currentActiveChat], "received") }}
+                                            <span v-if="(currentChatIndex != -1) && (!isOnline)">
+                                                Ultimo accesso oggi alle {{ getLastMsgTime(contacts[currentChatIndex], "received") }}
                                             </span>
                                             <span v-else>
                                                 {{ isOnlineMsg }}
@@ -245,7 +234,7 @@
 
                 </div> <!-- /chatPanel open-->
 
-                <div class="chatPanel closed" v-show="((currentActiveChat == -1))">
+                <div class="chatPanel closed" v-show="((currentChatIndex == -1))">
                     <img src="../img/backgroundAlternative.webp" alt="">
                     <h2>Start a new chat</h2>
 

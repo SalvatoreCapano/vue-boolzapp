@@ -175,13 +175,13 @@ createApp({
                 }
                 ],
             currentMessagesList: 0,
-            currentActiveChat: -1,
+            currentChatIndex: -1,
             currentMessage: "",
             searchBarInput: "",
             clickedMessage: -1,
             isOnline: false,
             isOnlineMsg: "online",
-            hideSidebar: false,
+            hideSidebar: false, //ok
             hideChatPanel: true,
             showMsgSearch: false,
             searchMsgInput: ""
@@ -276,7 +276,7 @@ createApp({
         openChat (contact, i) {
             this.currentMessagesList = contact.messages;
 
-            this.currentActiveChat = i;
+            this.currentChatIndex = i;
         },
         checkMsgStatus(msg) {
             if (msg.status == "sent") return true;
