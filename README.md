@@ -30,5 +30,7 @@ permette di cancellare il messaggio selezionato
 <!-- Idee Bonus -->
 - invio allegati
 - ordina contatti per ultimo messaggio
-- animazione "sta scrivendo..."
 - divisione unico messaggio lungo
+- versione mobile
+- cerca nella chat
+- pulsanti funzionanti
