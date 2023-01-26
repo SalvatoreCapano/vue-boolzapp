@@ -187,6 +187,10 @@
                             {{ currentMessage.message }}
                             <i class="fa-solid fa-chevron-down deleteMsgBtn" @click="toggleMenu(index)"></i>
 
+                            <span class="msgSentTime">
+                                {{ currentMessage.newDate.hour }}:{{ currentMessage.newDate.minute }}
+                            </span>
+
                             <div class="menu" :class="(clickedMessage == index) ? ('open') : ('')">
                                 <ul>
                                     <li>

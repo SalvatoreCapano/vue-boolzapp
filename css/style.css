@@ -375,7 +375,7 @@ main > .chatPanel.closed {
 /* CHAT PANEL 2/3 */
 .chatPanel .chatContent .message {
     max-width: 450px;
-    padding: 12px 20px;
+    padding: 12px 20px 22px;
     border-radius: 10px;
 
     display: flex;
@@ -419,6 +419,15 @@ main > .chatPanel.closed {
 .message.message.received::after {
     left: -10px;
     border-top: 12px solid var(--receivedMsg);
+}
+
+.message .msgSentTime {
+    position: absolute;
+    bottom: 3px;
+    right: 10px;
+
+    font-size: 0.7rem;
+    color: gray;
 }
 
 .message .deleteMsgBtn {
