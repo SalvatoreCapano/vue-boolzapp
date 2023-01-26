@@ -233,6 +233,7 @@ createApp({
                     }
                 }
             );
+            this.setScrollDown ();
         },
         sendMessage() {
             const date = new Date();
@@ -250,6 +251,7 @@ createApp({
             );
             this.currentMessage = "";
 
+            this.setScrollDown ();
             setTimeout(this.getResponse, 1000);
         },
         showOnSearchBar(contact) {
@@ -267,6 +269,14 @@ createApp({
         deleteMsg(array, i) {
             array.splice(i, 1);
             this.clickedMessage = -1;
+        },
+        setScrollDown() {
+            let chatContent = this.$refs.messagesContainer;
+
+            setTimeout(function(){
+                chatContent.scroll({ top: (chatContent.scrollHeight + 200), behavior: "smooth"})
+
+            }, 5)
         }
     },
     

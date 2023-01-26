@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boolzapp</title>
 
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -181,7 +184,7 @@
                     </header> <!-- /chatHeader-->
 
 
-                    <div class="chatContent">
+                    <div class="chatContent" ref="messagesContainer">
 
                         <span class="message" v-for="(currentMessage, index, array) in currentMessagesList" :class="(checkMsgStatus(currentMessage)) ? ('sent') : ('received')">
                             {{ currentMessage.message }}

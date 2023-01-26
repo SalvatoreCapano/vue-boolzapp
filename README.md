@@ -28,6 +28,7 @@ permette di cancellare il messaggio selezionato
 ● Visualizzazione ora e ultimo messaggio inviato/ricevuto nella lista dei contatti
 
 <!-- Idee Bonus -->
-- favicon
 - invio allegati
-- scroll automatico all'invio di un messaggio
+- ordina contatti per ultimo messaggio
+- animazione "sta scrivendo..."
+- divisione unico messaggio lungo
