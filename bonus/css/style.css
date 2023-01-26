@@ -193,22 +193,19 @@ main > .chatPanel.closed {
     gap: 0.6rem;
 }
 
-.navbar ul li a {
-    padding: 5px 8px;
-}
-
-.navbar ul li a button {
+.navbar ul li button {
     background: none;
     border: none;
-
+    
     font-size: 1.25rem;
     color: rgb(89, 89, 89);
     
+    padding: 5px 8px;
     cursor: pointer;
     transition: color 0.05s;
 }
 
-.navbar ul li a:hover button{
+.navbar ul li:hover button{
     color: gray;
 }
 
@@ -382,6 +379,23 @@ main > .chatPanel.closed {
     color: gray;
 }
 
+.chatPanel .chatHeader .msgSearchbar {
+    padding: 3px 10px;
+
+    border-radius: 6px;
+    border: 1px solid #e1e1e1;
+    background-color: white;
+}
+
+.chatPanel .chatHeader .msgSearchbar:focus {
+    outline: none;
+    outline: 2px solid var(--mySecondaryColor);
+}
+
+.chatPanel .chatHeader #msgSearchBtn.active {
+    color: var(--mySecondaryColor);
+}
+
 /* CHAT PANEL 2/3 */
 .chatPanel .chatContent .message {
     max-width: 450px;
@@ -399,6 +413,11 @@ main > .chatPanel.closed {
     align-self: flex-end;
 
     background-color: var(--sentMsg);
+}
+
+.message.found .messageText{
+    background-color: red;
+    background-color: rgba(180, 180, 0, 0.75);
 }
 
 .message.received {

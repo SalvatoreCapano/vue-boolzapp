@@ -126,6 +126,11 @@ createApp({
                             date: '10/01/2020 15:51:00',
                             message: 'Nessuna nuova, buona nuova',
                             status: 'sent'
+                        },
+                        {
+                            date: '18/04/2021 10:28:00',
+                            message: 'Ciaooo',
+                            status: 'received'
                         }
                     ],
                 },
@@ -173,12 +178,13 @@ createApp({
             currentActiveChat: -1,
             currentMessage: "",
             searchBarInput: "",
-            menuOpen: false,
             clickedMessage: -1,
             isOnline: false,
             isOnlineMsg: "online",
             hideSidebar: false,
-            hideChatPanel: true
+            hideChatPanel: true,
+            showMsgSearch: false,
+            searchMsgInput: ""
         };
     },
 
@@ -212,30 +218,60 @@ createApp({
             });
         }, 
         getLastMsgTime (contact, direction) {
-            let lastMsgIndex = contact.messages.length - 1;
+            // let self = this;
+            // setInterval(function(){
 
-            const date = new Date();
+                let lastMsgIndex = contact.messages.length - 1;
 
-            if (direction == "received") {
-
-                let time= "";
-                do {
-                    if (time != "") {    
-                        lastMsgIndex--;
-                    }
-                    time =  `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`;
-                } while (contact.messages[lastMsgIndex].status == "sent")
-                return time;
-            }
-            else {
-
-                if ((contact.messages[lastMsgIndex].newDate.day == date.getDay()) && (contact.messages[lastMsgIndex].newDate.month == date.getMonth())) {
-                    return `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`;
+                const date = new Date();
+    
+                if (direction == "received") {
+    
+                    let time= "";
+                    do {
+                        if (time != "") {    
+                            lastMsgIndex--;
+                        }
+                        time = `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`;
+                    } while ((contact.messages[lastMsgIndex].status == "sent") && (lastMsgIndex > 0))
+                    return time;
                 }
                 else {
-                    return `${contact.messages[lastMsgIndex].newDate.day}/${contact.messages[lastMsgIndex].newDate.month}`;
+    
+                    if ((contact.messages[lastMsgIndex].newDate.day == date.getDay()) && (contact.messages[lastMsgIndex].newDate.month == date.getMonth())) {
+                        return `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`;
+                    }
+                    else {
+                        return `${contact.messages[lastMsgIndex].newDate.day}/${contact.messages[lastMsgIndex].newDate.month}`;
+                    }
                 }
-            }
+
+            // }, 20)
+
+            // let lastMsgIndex = contact.messages.length - 1;
+
+            // const date = new Date();
+
+            // if (direction == "received") {
+
+            //     let time= "";
+            //     do {
+            //         if (time != "") {    
+            //             lastMsgIndex--;
+            //         }
+            //         time = `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`;
+            //     } while (contact.messages[lastMsgIndex].status == "sent")
+            //     return time;
+            // }
+            // else {
+
+            //     if ((contact.messages[lastMsgIndex].newDate.day == date.getDay()) && (contact.messages[lastMsgIndex].newDate.month == date.getMonth())) {
+            //         return `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`;
+            //     }
+            //     else {
+            //         return `${contact.messages[lastMsgIndex].newDate.day}/${contact.messages[lastMsgIndex].newDate.month}`;
+            //     }
+            // }
         },
         openChat (contact, i) {
             this.currentMessagesList = contact.messages;
@@ -276,6 +312,7 @@ createApp({
         },
         sendMessage() {
             const date = new Date();
+
             this.currentMessagesList.push(
                 {
                     date: '10/01/2020 15:51:00',
@@ -330,8 +367,14 @@ createApp({
 
             setTimeout(function(){
                 chatContent.scroll({ top: (chatContent.scrollHeight + 200), behavior: "smooth"})
+            }, 5);
+        },
+        msgSearch(msg) {
+            let stringToSearch = this.searchMsgInput.toLowerCase();
+            let tempMsg = msg.message.toLowerCase().split(/[;,— ?!]+/);
+            const filteredMsg = tempMsg.filter(word => word != "");
 
-            }, 5)
+            if (filteredMsg.includes(stringToSearch)) return true;
         }
     },
     

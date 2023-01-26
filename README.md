@@ -31,6 +31,12 @@ permette di cancellare il messaggio selezionato
 - invio allegati
 - ordina contatti per ultimo messaggio
 - divisione unico messaggio lungo
-- versione mobile
-- cerca nella chat
 - pulsanti funzionanti
+
+BONUS
+-Nella schermata della chat, all'invio o la ricezione di un nuovo messaggio la pagina scrolla in basso per permettere di leggere senza dover scrollare manualmente
+-Aggiunto stato ultimo accesso (Ora ultimo accesso, Online, Sta scrivendo...)
+-Se non sono stati inviati messaggi oggi, nella lista chat viene riportata la DATA dell'ultimo messaggio
+-Aggiunta versione mobile
+-Aggiunta favicon
+-Aggiunta possibilita' di cercare messaggi nella chat

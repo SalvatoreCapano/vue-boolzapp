@@ -100,7 +100,11 @@
 
                         <ul>
 
-                            <li v-for="(contact, index) in contacts" @click="openChat(contact, index), hideSidebar = true, hideChatPanel = false" :class="(index == currentActiveChat) ? ('active') : ('')" v-show="showOnSearchBar(contact)">
+                            <li v-for="(contact, index) in contacts" 
+                                @click="openChat(contact, index), hideSidebar = true, hideChatPanel = false, clickedMessage = -1" 
+                                :class="(index == currentActiveChat) ? ('active') : ('')" 
+                                v-show="showOnSearchBar(contact)"
+                            >
                                 <div class="iconContainer">
 
                                     <div class="userPicture">
@@ -175,21 +179,21 @@
                         <nav class="navbar">
                             <ul>
                                 <li>
-                                    <a href="#">
-                                        <button><i class="fa-solid fa-magnifying-glass"></i></button>
-                                    </a>
+                                    <input v-model="searchMsgInput" type="text" v-if="showMsgSearch" class="msgSearchbar" placeholder="Cerca messaggi">
+                                    <button 
+                                    id="msgSearchBtn"
+                                    @click="(showMsgSearch = !showMsgSearch), searchMsgInput = ''"
+                                    :class="(showMsgSearch) ? ('active') : ('')">
+                                        <i class="fa-solid fa-magnifying-glass"></i>
+                                    </button>
                                 </li>
 
                                 <li>
-                                    <a href="#">
-                                        <button><i class="fa-solid fa-paperclip"></i></i></button>
-                                    </a>
+                                    <button><i class="fa-solid fa-paperclip"></i></i></button> 
                                 </li>
 
                                 <li>
-                                    <a href="#">
-                                        <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                    </a>
+                                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button> 
                                 </li>
                             </ul>
                         </nav>
@@ -199,8 +203,14 @@
 
                     <div class="chatContent" ref="messagesContainer">
 
-                        <span class="message" v-for="(currentMessage, index, array) in currentMessagesList" :class="(checkMsgStatus(currentMessage)) ? ('sent') : ('received')">
-                            {{ currentMessage.message }}
+                        <span class="message" v-for="(currentMessage, index) in currentMessagesList" 
+                            :class="[
+                                        (checkMsgStatus(currentMessage)) ? ('sent') : ('received'),
+                                        (msgSearch(currentMessage)) ? ('found') : ('')
+                                    ]">
+                            <span class="messageText" ref="messageText">
+                                {{ currentMessage.message }}
+                            </span>
                             <i class="fa-solid fa-chevron-down deleteMsgBtn" @click="toggleMenu(index)"></i>
 
                             <span class="msgSentTime">
