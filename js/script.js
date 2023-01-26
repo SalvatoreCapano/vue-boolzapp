@@ -172,7 +172,9 @@ createApp({
             currentMessagesList: 0,
             currentActiveChat: -1,
             currentMessage: "",
-            searchBarInput: ""
+            searchBarInput: "",
+            menuOpen: false,
+            clickedMessage: -1
         };
     },
 
@@ -252,6 +254,19 @@ createApp({
         },
         showOnSearchBar(contact) {
             if (contact.name.toLowerCase().includes(this.searchBarInput.toLowerCase())) return true;
+        },
+        toggleMenu(i) {
+
+            if (this.clickedMessage == i) {
+                this.clickedMessage = -1;
+            }
+            else {
+                this.clickedMessage = i;
+            }
+        },
+        deleteMsg(array, i) {
+            array.splice(i, 1);
+            this.clickedMessage = -1;
         }
     },
     

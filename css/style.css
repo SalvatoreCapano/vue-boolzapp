@@ -75,6 +75,13 @@ main > .chatPanel {
     flex-grow: 1;
 }
 
+main > .chatPanel.closed {
+    text-align: center;
+    
+    border-bottom: 5px solid var(--mySecondaryColor);
+    background-color: #faf9ff;
+}
+
 /* SIDEBAR */
 .sidebar .sidebarMenu {
     height: 80px;
@@ -144,6 +151,27 @@ main > .chatPanel {
     flex-shrink: 0;
 
     background-color: var(--myMainColor);
+}
+
+.chatPanel.closed img {
+    width: 50%;
+    display: block;
+    margin: 14rem auto 1rem;
+}
+
+.chatPanel.closed h2 {
+    color: rgb(15, 15, 15);
+    margin-bottom: auto;
+}
+
+.chatPanel.closed span {
+    font-size: 0.9rem;
+    margin-top: auto;
+    margin-bottom: 1rem;
+}
+
+.chatPanel.closed span a {
+    color: var(--mySecondaryColor);
 }
 
 /* SIDEBAR 1/4 */
@@ -347,8 +375,12 @@ main > .chatPanel {
 /* CHAT PANEL 2/3 */
 .chatPanel .chatContent .message {
     max-width: 450px;
-    padding: 12px;
+    padding: 12px 20px;
     border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 
     position: relative;
 }
@@ -361,6 +393,7 @@ main > .chatPanel {
 
 .message.received {
     align-self: flex-start;
+    flex-direction: row-reverse;
 
     background-color: var(--receivedMsg);
 }
@@ -386,6 +419,62 @@ main > .chatPanel {
 .message.message.received::after {
     left: -10px;
     border-top: 12px solid var(--receivedMsg);
+}
+
+.message .deleteMsgBtn {
+    font-size: 0.7rem;
+    color: gray;
+    cursor: pointer;
+}
+
+/* Menu Elimina messaggio */
+.message .menu {
+    position: absolute;
+    bottom: -95px;
+
+    width: 150px;
+
+    padding: 5px 0;
+    box-shadow: 0px 5px 15px 3px #00000040;
+    background-color: white;
+    
+    z-index: 30;
+
+    display: none;
+}
+
+.message .menu.open {
+    display: block;
+}
+
+.message.sent .menu {
+    right: 20px;
+}
+
+.message.received .menu {
+    left: 20px;
+}
+
+.message .menu ul {
+    list-style: none;
+}
+
+.message .menu ul li button {
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+
+    text-align: left;
+    padding: 0 8px;
+
+    background: none;
+    border: none;
+
+    cursor: pointer;
+}
+
+.message .menu ul li button:hover {
+    background-color: rgb(230, 230, 230);
 }
 
 /* CHAT PANEL 3/3 */
