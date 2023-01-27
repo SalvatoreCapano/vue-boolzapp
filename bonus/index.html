@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Boolzapp</title>
+    <title>Boolzapp Premium</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
@@ -92,9 +92,10 @@
                         <ul>
 
                             <li v-for="(contact, index) in contacts" 
-                                @click="openChat(contact, index), hideSidebar = true, hideChatPanel = false, clickedMessage = -1" 
+                                @click="openChat(contact, index), hideSidebar = true, clickedMessageIndex = -1" 
                                 :class="(index == currentChatIndex) ? ('active') : ('')" 
                                 v-show="showOnSearchBar(contact)">
+
                                 <div class="iconContainer">
 
                                     <div class="userPicture">
@@ -102,7 +103,6 @@
                                     </div> <!-- /userPicture-->
 
                                 </div> <!-- /iconContainer-->
-
 
                                 <div class="chatInfo">
 
@@ -114,11 +114,11 @@
 
                                 </div> <!-- /chatInfo-->
 
+                                <div class="lastMsgTime">
+                                    {{ getLastMsgTime(contact.messages, "any") }}
+                                </div> <!-- /lastMsgTime-->
 
-                                <div class="timeContainer">
-                                    {{ getLastMsgTime(contact) }}
-                                </div> <!-- /timeContainer-->
-                            </li>
+                            </li> <!-- / elemento lista contatti-->
 
                         </ul>
                     </div> <!-- /chatList-->
@@ -126,39 +126,38 @@
                 </div> <!-- /sidebar-->
 
 
-                <div class="chatPanel open"  v-if="currentChatIndex != -1" :class="(hideChatPanel) ? ('hidden') : ('')">
+                <div class="chatPanel open"  v-if="currentChatIndex != -1">
 
                     <header class="chatHeader">
 
                         <div class="container">
 
-                            <span id="backBtn" @click="hideSidebar= false, hideChatPanel= true">
+                            <span id="backBtn" @click="hideSidebar = false, currentChatIndex = -1">
                                 <i class="fa-solid fa-chevron-left"></i>
                             </span>
 
                             <div class="headerChatInfo">
 
                                 <a href="">
-    
                                     <div class="userPicture">
-                                        <img :alt="`${contacts[currentChatIndex].name}`" :src="`../img/avatar${contacts[currentChatIndex].avatar}.jpg`">
+                                        <img :alt="`${currentContact.name}`" :src="`../img/avatar${currentContact.avatar}.jpg`">
                                     </div> <!-- /userPicture-->
             
                                     <div class="chatInfo">
     
-                                        <h4 class="contactName">{{ contacts[currentChatIndex].name }}</h4>
+                                        <h4 class="contactName">{{ currentContact.name }}</h4>
     
                                         <span class="accessStatus">
                                             <span v-if="(currentChatIndex != -1) && (!isOnline)">
-                                                Ultimo accesso oggi alle {{ getLastMsgTime(contacts[currentChatIndex], "received") }}
+                                                Ultimo accesso oggi alle {{ getLastMsgTime(currentContact.messages, "received") }}
                                             </span>
+                                            
                                             <span v-else>
                                                 {{ isOnlineMsg }}
                                             </span>
-                                        </span>
+                                        </span> <!-- /accessStatus-->
     
                                     </div> <!-- /chatInfo-->
-    
                                 </a>
     
                             </div> <!-- /chatHeaderInfo-->
@@ -168,11 +167,11 @@
                         <nav class="navbar">
                             <ul>
                                 <li>
-                                    <input v-model="searchMsgInput" type="text" v-if="showMsgSearch" class="msgSearchbar" placeholder="Cerca messaggi">
+                                    <input v-model="searchMsgInput" type="text" v-if="showMsgSearch" class="msgSearchbar" placeholder="Cerca messaggi" ref="msgSearchInput">
                                     <button 
-                                    id="msgSearchBtn"
-                                    @click="(showMsgSearch = !showMsgSearch), searchMsgInput = ''"
-                                    :class="(showMsgSearch) ? ('active') : ('')">
+                                        id="msgSearchBtn"
+                                        @click="(showMsgSearch = !showMsgSearch), searchMsgInput = ''"
+                                        :class="(showMsgSearch) ? ('active') : ('')">
                                         <i class="fa-solid fa-magnifying-glass"></i>
                                     </button>
                                 </li>
@@ -185,35 +184,37 @@
                                     <button><i class="fa-solid fa-ellipsis-vertical"></i></button> 
                                 </li>
                             </ul>
-                        </nav>
+                        </nav> <!-- /navbar-->
 
                     </header> <!-- /chatHeader-->
 
 
                     <div class="chatContent" ref="messagesContainer">
 
-                        <span class="message" v-for="(currentMessage, index) in currentMessagesList" 
+                        <span class="message" v-for="(msgItem, index) in currentContact.messages" 
                             :class="[
-                                        (checkMsgStatus(currentMessage)) ? ('sent') : ('received'),
-                                        (msgSearch(currentMessage)) ? ('found') : ('')
+                                        msgItem.status,
+                                        (msgSearch(msgItem)) ? ('found') : ('')
                                     ]">
-                            <span class="messageText" ref="messageText">
-                                {{ currentMessage.message }}
+
+                            <span class="messageText">
+                                {{ msgItem.message }}
                             </span>
+
                             <i class="fa-solid fa-chevron-down deleteMsgBtn" @click="toggleMenu(index)"></i>
 
                             <span class="msgSentTime">
-                                {{ currentMessage.newDate.hour }}:{{ currentMessage.newDate.minute }}
+                                {{ msgItem.newDate.hour }}:{{ msgItem.newDate.minute }}
                             </span>
 
-                            <div class="menu" :class="(clickedMessage == index) ? ('open') : ('')">
+                            <div class="menu" :class="(clickedMessageIndex == index) ? ('open') : ('')">
                                 <ul>
                                     <li>
                                         <button>Info messaggio</button>
                                     </li>
                                     
                                     <li>
-                                        <button @click="deleteMsg(currentMessagesList, index)">Elimina messaggio</button>
+                                        <button @click="deleteMsg(currentContact.messages, index)">Elimina messaggio</button>
                                     </li>
                                 </ul>
                             </div>
@@ -234,9 +235,9 @@
 
                 </div> <!-- /chatPanel open-->
 
-                <div class="chatPanel closed" v-show="((currentChatIndex == -1))">
-                    <img src="../img/backgroundAlternative.webp" alt="">
-                    <h2>Start a new chat</h2>
+                <div class="chatPanel closed" v-else>
+                    <img src="../img/backgroundAlternative.webp" alt="Boolzapp Web">
+                    <h2>Inizia una nuova chat</h2>
 
                     <span>&copy; Boolzapp by <a href="https://boolean.careers/?utm_source=google&utm_campaign=it_search_brand&utm_medium=cpc&utm_content=boolean&utm_term=boolean&gclid=Cj0KCQiAw8OeBhCeARIsAGxWtUw71qmxDcKDsey5QZnsXbqz4NKObg4xnGRxBdYL7k1toBH3SGULVAYaAg8_EALw_wcB">Boolean</a></span>
                 </div> <!-- /chatPanel closed-->

@@ -32,6 +32,12 @@ permette di cancellare il messaggio selezionato
 - ordina contatti per ultimo messaggio
 - divisione unico messaggio lungo
 - pulsanti funzionanti
+- Animazione banner notifiche
+- dark mode
+- invio emoji
+- correggere ricezione del messaggio se cambio chat prima di riceverlo
+    - ..e aggiungere notifica nuovo messaggio
+- chiusura menu se si clicca fuori di esso
 
 BONUS
 - Nella schermata della chat, all'invio o la ricezione di un nuovo messaggio la pagina scrolla in basso per permettere di leggere senza dover scrollare manualmente
@@ -40,4 +46,4 @@ BONUS
 - Aggiunta versione mobile
 - Aggiunta favicon
 - Aggiunta possibilita' di cercare messaggi nella chat
-- Animazione banner notifiche
+- Aggiunta taglio dei messaggi nella chatlist se essi sono troppo lunghi

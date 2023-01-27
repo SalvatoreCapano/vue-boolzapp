@@ -46,7 +46,7 @@ createApp({
                         },
                         {
                             date: '20/03/2020 16:35:00',
-                            message: 'Mi piacerebbe ma devo andare a fare la spesa.',
+                            message: 'Mi piacerebbe ma devo andare a fare la spesa, vediamoci un altro giorno.',
                             status: 'sent'
                         }
                     ],
@@ -174,29 +174,34 @@ createApp({
                     ],
                 }
                 ],
-            currentMessagesList: 0,
-            currentChatIndex: -1,
-            currentMessage: "",
-            searchBarInput: "",
-            clickedMessage: -1,
-            isOnline: false,
-            isOnlineMsg: "online",
-            hideSidebar: false, //ok
-            hideChatPanel: true,
-            showMsgSearch: false,
-            searchMsgInput: ""
+            currentChatIndex: -1,               //Indice chat cliccata
+            currentMessage: "",                 //Messaggio digitato nell'input
+            currentContact: undefined,          //Contatto presente nel pannello della chat
+            searchBarInput: "",                 //Contatto cercato nella searchbar
+            clickedMessageIndex: -1,            //Indice del messaggio cliccato nel pannello della chat
+            isOnline: false,                    //True -> il contatto e' online   |   False -> il contatto e' offline
+            isOnlineMsg: "Online",              // Puo' essere 'Online' o 'Sta scrivendo...'
+            hideSidebar: false,                 //A seconda del valore, la sidebar viene nascosta o meno
+            showMsgSearch: false,               //A seconda del valore, la searchbar dei messaggi e' mostrata o meno
+            searchMsgInput: ""                  //Messaggio cercato nell'input
         };
     },
 
     methods: {
-        assembleSrc(i) {
-            return `../img/avatar${this.contacts[i].avatar}.jpg`;
-        },
         getLastMsg (contact) {
-            let lastMsgIndex = contact.messages.length - 1;
-            return contact.messages[lastMsgIndex].message;
+            // Ritorna l'ultimo messaggio della chat, se presente, altrimenti una stringa vuota
+
+            if (contact.messages != false) {
+                let lastMsgIndex = contact.messages.length - 1;
+                return contact.messages[lastMsgIndex].message;
+            }
+            else {
+                return "";
+            }
         },
         deconstructDate () {
+            // Dalla proprieta' "date" di ogni messaggio, che contiene la stringa indicante la data
+            // dell'invio del messaggio, ricava un oggetto contenente la data divisa
             this.contacts.forEach(contact => {
 
                 contact.messages.forEach(msg => {
@@ -217,77 +222,58 @@ createApp({
                 });
             });
         }, 
-        getLastMsgTime (contact, direction) {
-            // let self = this;
-            // setInterval(function(){
+        getLastMsgTime (messageArray, direction) {
+            // Ritorna l'ora o la data dell'ultimo messaggio della chat o
+            // dell'ultimo messaggio ricevuto
 
-                let lastMsgIndex = contact.messages.length - 1;
+            const date = new Date();
+            let lastMsgIndex = messageArray.length - 1;
 
-                const date = new Date();
+            if (lastMsgIndex >= 0) {
     
+                // Calcolo ora ultimo messaggio inviato dal contatto
                 if (direction == "received") {
-    
                     let time= "";
+
                     do {
                         if (time != "") {    
                             lastMsgIndex--;
                         }
-                        time = `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`;
-                    } while ((contact.messages[lastMsgIndex].status == "sent") && (lastMsgIndex > 0))
+                        time = `${messageArray[lastMsgIndex].newDate.hour}:${messageArray[lastMsgIndex].newDate.minute}`;
+
+                    } while ((messageArray[lastMsgIndex].status == "sent") && (lastMsgIndex > 0));
+
                     return time;
-                }
-                else {
-    
-                    if ((contact.messages[lastMsgIndex].newDate.day == date.getDay()) && (contact.messages[lastMsgIndex].newDate.month == date.getMonth())) {
-                        return `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`;
+
                     }
+                //  Calcolo ora/data ultimo messaggio inviato da chiunque
+                else if (direction == "any") {
+
+                    // Se l'ultimo messaggio e' stato inviato oggi, mostra l'ora...
+                    if ((messageArray[lastMsgIndex].newDate.day == date.getDay()) && (messageArray[lastMsgIndex].newDate.month == date.getMonth())) {
+                        return `${messageArray[lastMsgIndex].newDate.hour}:${messageArray[lastMsgIndex].newDate.minute}`;
+                    }
+                    // ... altrimenti mostra la data
                     else {
-                        return `${contact.messages[lastMsgIndex].newDate.day}/${contact.messages[lastMsgIndex].newDate.month}`;
+                        return `${messageArray[lastMsgIndex].newDate.day}/${messageArray[lastMsgIndex].newDate.month}`;
                     }
+
                 }
-
-            // }, 20)
-
-            // let lastMsgIndex = contact.messages.length - 1;
-
-            // const date = new Date();
-
-            // if (direction == "received") {
-
-            //     let time= "";
-            //     do {
-            //         if (time != "") {    
-            //             lastMsgIndex--;
-            //         }
-            //         time = `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`;
-            //     } while (contact.messages[lastMsgIndex].status == "sent")
-            //     return time;
-            // }
-            // else {
-
-            //     if ((contact.messages[lastMsgIndex].newDate.day == date.getDay()) && (contact.messages[lastMsgIndex].newDate.month == date.getMonth())) {
-            //         return `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`;
-            //     }
-            //     else {
-            //         return `${contact.messages[lastMsgIndex].newDate.day}/${contact.messages[lastMsgIndex].newDate.month}`;
-            //     }
-            // }
+            }
         },
         openChat (contact, i) {
-            this.currentMessagesList = contact.messages;
+            // Aggiorna il contatto corrente e l'indice della chat corrente
+            this.currentContact = contact;
 
             this.currentChatIndex = i;
         },
-        checkMsgStatus(msg) {
-            if (msg.status == "sent") return true;
-            else return false;
-        }, 
-        getResponse() {
+        addToMessageList (message, status) {
+            // Aggiunge un messaggio all'array dei messaggi
             const date = new Date();
-            this.currentMessagesList.push(
+            this.currentContact.messages.push(
                 {
-                    message: "OK!",
-                    status: 'received',
+                    message: message,
+                    status: status,
                     newDate: {
                         second: date.getSeconds(),
                         minute: date.getMinutes(),
@@ -298,43 +284,11 @@ createApp({
                     }
                 }
             );
-            this.setScrollDown ();
-
-            let self = this;
-            setTimeout(function() {
-                self.isOnlineMsg = "Online";
-
-                setTimeout(function() {
-                    self.isOnline = false;
-                }, 1500)
-
-            }, 10)
         },
-        sendMessage() {
-            const date = new Date();
-
-            this.currentMessagesList.push(
-                {
-                    date: '10/01/2020 15:51:00',
-                    message: this.currentMessage,
-                    status: 'sent',
-                    newDate: {
-                        second: date.getSeconds(),
-                        minute: date.getMinutes(),
-                        hour: date.getHours(),
-                        day: date.getDay(),
-                        month: date.getMonth(),
-                        year: date.getFullYear()
-                    }
-                }
-            );
-            console.log(this.currentMessagesList);
-            this.currentMessage = "";
-
-            this.setScrollDown ();
+        getResponse() {
+            // Gestisce lo status del contatto e richiama la ricevuta di un nuovo messaggio
 
             let self = this;
-
             setTimeout(function(){
                 self.isOnline = true;
 
@@ -344,35 +298,66 @@ createApp({
                 
             }, 500)
 
-            setTimeout(this.getResponse, 3000);
+            setTimeout(function() {
+                self.isOnlineMsg = "Online";
+                self.addToMessageList("OK!", "received");
+                self.setScrollDown ();
+
+                setTimeout(function() {
+                    self.isOnline = false;
+                }, 1500)
+
+            }, 3000)
+
+        },
+        sendMessage() {
+            // Aggiunge il testo dell'input e l'orario attuale all'array dei messaggi
+
+            this.addToMessageList(this.currentMessage, "sent");
+            this.currentMessage = "";
+
+            this.setScrollDown ();
+
+            this.getResponse();
         },
         showOnSearchBar(contact) {
+            // Se il nome del contatto e' contenuto nella stringa digitata nella searchbar, ritorna 'true'
             if (contact.name.toLowerCase().includes(this.searchBarInput.toLowerCase())) return true;
         },
         toggleMenu(i) {
+            // Gestisce l'indice del messaggio al quale deve comparire il menu
 
-            if (this.clickedMessage == i) {
-                this.clickedMessage = -1;
+            if (this.clickedMessageIndex == i) {
+                this.clickedMessageIndex = -1;
             }
             else {
-                this.clickedMessage = i;
+                this.clickedMessageIndex = i;
             }
         },
-        deleteMsg(array, i) {
-            array.splice(i, 1);
-            this.clickedMessage = -1;
+        deleteMsg(messageArray, i) {
+            // Array -> lista di messaggi dalla quale eliminare il messaggio
+            // i -> indice del messaggio da eliminare
+            messageArray.splice(i, 1);
+
+            // Chiude il menu'
+            this.clickedMessageIndex = -1;
         },
         setScrollDown() {
+            // Scrolla il pannello della chat se un nuovo messaggio e' aggiunto
             let chatContent = this.$refs.messagesContainer;
 
             setTimeout(function(){
-                chatContent.scroll({ top: (chatContent.scrollHeight + 200), behavior: "smooth"})
+                chatContent.scroll({ top: (chatContent.scrollHeight + 200), behavior: "smooth"});
             }, 5);
         },
         msgSearch(msg) {
+            // Cerca msg tra i messaggi della chat corrente
+
             let stringToSearch = this.searchMsgInput.toLowerCase();
-            let tempMsg = msg.message.toLowerCase().split(/[;,— ?!]+/);
-            const filteredMsg = tempMsg.filter(word => word != "");
+
+            // Contiene tutte le parole di msg, ripulito da caratteri speciali
+            let filteredMsg = msg.message.toLowerCase().split(/[;,— ?!]+/);
+            filteredMsg = filteredMsg.filter(word => word != "");
 
             if (filteredMsg.includes(stringToSearch)) return true;
         }
