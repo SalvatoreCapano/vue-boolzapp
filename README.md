@@ -28,12 +28,10 @@ permette di cancellare il messaggio selezionato
 ● Visualizzazione ora e ultimo messaggio inviato/ricevuto nella lista dei contatti
 
 <!-- Idee Bonus -->
-- invio allegati
 - ordina contatti per ultimo messaggio
 - divisione unico messaggio lungo
 - pulsanti funzionanti
 - Animazione banner notifiche
-- dark mode
 - invio emoji
 - correggere ricezione del messaggio se cambio chat prima di riceverlo
     - ..e aggiungere notifica nuovo messaggio
@@ -47,3 +45,5 @@ BONUS
 - Aggiunta possibilita' di cercare messaggi nella chat
 - Aggiunta taglio dei messaggi nella chatlist se essi sono troppo lunghi
 - Il menu (che si apre cliccando la freccia sui msg) si chiude se clicchi al di fuori di esso
+- Aggiunta possibilita' di inviare foto
+- Aggiunta Dark Mode

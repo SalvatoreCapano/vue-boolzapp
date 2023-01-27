@@ -19,240 +19,267 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/darkMode.css">
 </head>
 <body>
 
     <div class="wrapper">
         <div id="app">
-            <main>
+            <div class="container" :class="(isDarkMode) ? ('darkMode') : ('')">
 
-                <div class="sidebar" :class="(hideSidebar) ? ('hidden') : ('')">
+                <main>
 
-                    <div class="sidebarHeader">
+                    <div class="sidebar" :class="(hideSidebar) ? ('hidden') : ('')">
 
-                        <div class="userInfo">
+                        <div class="sidebarHeader">
 
-                            <a href="">
-                                <div class="userPicture">
-                                    <img src="../img/avatar_io.jpg" alt="*Your username*">
-                                </div> <!-- /userPicture-->
-        
-                                <h4 class="userName">Sofia</h4>
-                            </a>
-
-                        </div> <!-- /userInfo-->
-
-                        <nav class="navbar">
-                            <ul>
-                                <li>
-                                    <button><i class="fa-solid fa-circle-notch"></i></button>
-                                </li>
-
-                                <li>
-                                    <button><i class="fa-solid fa-message"></i></button>
-                                </li>
-
-                                <li>
-                                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                </li>
-                            </ul>
-                        </nav> <!-- /navbar-->
-
-                    </div> <!-- /sidebarHeader-->
-
-
-                    <div class="notificationsBanner">
-
-                        <span class="iconContainer">
-                            <i class="fa-solid fa-bell-slash"></i>
-                        </span> <!-- /iconContainer-->
-
-                        <div class="textContainer">
-                            <span>Ricevi notifiche di nuovi messaggi</span>
-                            <button>Attiva notifiche per desktop</button>
-                        </div> <!-- /textContainer-->
-
-                    </div> <!-- /notificationsBanner-->
-
-
-                    <div class="searchBarContainer">
-
-                        <div class="searchBar">
-
-                            <span><i class="fa-solid fa-magnifying-glass"></i></span>
-
-                            <input v-model="searchBarInput" type="text" placeholder="Cerca o inizia una nuova chat">
-
-                        </div> <!-- /searchBar-->
-
-                    </div> <!-- /searchBarContainer-->
-
-
-                    <div class="chatList">
-                        <ul>
-
-                            <li v-for="(contact, index) in contacts" 
-                                @click="openChat(contact, index), hideSidebar = true, clickedMessageIndex = -1" 
-                                :class="(index == currentChatIndex) ? ('active') : ('')" 
-                                v-show="showOnSearchBar(contact)">
-
-                                <div class="iconContainer">
-
-                                    <div class="userPicture">
-                                        <img :alt="`${contact.name}`" :src="`../img/avatar${contact.avatar}.jpg`">
-                                    </div> <!-- /userPicture-->
-
-                                </div> <!-- /iconContainer-->
-
-                                <div class="chatInfo">
-
-                                    <h4 class="contactName">{{ contact.name }}</h4>
-
-                                    <span class="lastMsgPreview">
-                                        {{ getLastMsg(contact) }}
-                                    </span>
-
-                                </div> <!-- /chatInfo-->
-
-                                <div class="lastMsgTime">
-                                    {{ getLastMsgTime(contact.messages, "any") }}
-                                </div> <!-- /lastMsgTime-->
-
-                            </li> <!-- / elemento lista contatti-->
-
-                        </ul>
-                    </div> <!-- /chatList-->
-
-                </div> <!-- /sidebar-->
-
-
-                <div class="chatPanel open"  v-if="currentChatIndex != -1">
-
-                    <header class="chatHeader">
-
-                        <div class="container">
-
-                            <span id="backBtn" @click="hideSidebar = false, currentChatIndex = -1">
-                                <i class="fa-solid fa-chevron-left"></i>
-                            </span>
-
-                            <div class="headerChatInfo">
+                            <div class="userInfo">
 
                                 <a href="">
                                     <div class="userPicture">
-                                        <img :alt="`${currentContact.name}`" :src="`../img/avatar${currentContact.avatar}.jpg`">
+                                        <img src="../img/avatar_io.jpg" alt="*Your username*">
                                     </div> <!-- /userPicture-->
             
-                                    <div class="chatInfo">
-    
-                                        <h4 class="contactName">{{ currentContact.name }}</h4>
-    
-                                        <span class="accessStatus">
-                                            <span v-if="(currentChatIndex != -1) && (!isOnline)">
-                                                Ultimo accesso oggi alle {{ getLastMsgTime(currentContact.messages, "received") }}
-                                            </span>
-                                            
-                                            <span v-else>
-                                                {{ isOnlineMsg }}
-                                            </span>
-                                        </span> <!-- /accessStatus-->
-    
-                                    </div> <!-- /chatInfo-->
+                                    <h4 class="userName">Sofia</h4>
                                 </a>
-    
-                            </div> <!-- /chatHeaderInfo-->
 
-                        </div> <!-- /container-->
+                            </div> <!-- /userInfo-->
 
-                        <nav class="navbar">
-                            <ul>
-                                <li>
-                                    <input v-model="searchMsgInput" type="text" v-if="showMsgSearch" class="msgSearchbar" placeholder="Cerca messaggi" ref="msgSearchInput">
-                                    <button 
-                                        id="msgSearchBtn"
-                                        @click="(showMsgSearch = !showMsgSearch), searchMsgInput = ''"
-                                        :class="(showMsgSearch) ? ('active') : ('')">
-                                        <i class="fa-solid fa-magnifying-glass"></i>
-                                    </button>
-                                </li>
-
-                                <li>
-                                    <button id="attachBtn">
-                                        <label for="attach">
-                                            <i class="fa-solid fa-paperclip"></i>
-                                        </label>
-                                    </button> 
-                                    <input @change="getAttachment" type="file" id="attach" name="attach">
-                                </li>
-
-                                <li>
-                                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button> 
-                                </li>
-                            </ul>
-                        </nav> <!-- /navbar-->
-
-                    </header> <!-- /chatHeader-->
-
-
-                    <div class="chatContent" ref="messagesContainer">
-
-                        <span class="message" v-for="(msgItem, index) in currentContact.messages" 
-                            :class="[
-                                        msgItem.status,
-                                        (msgSearch(msgItem)) ? ('found') : ('')
-                                    ]">
-
-                            <span class="messageText" v-if="!msgItem.isAttachment">
-                                {{ msgItem.message }}
-                            </span>
-                            <span class="attachment" v-else>
-                                <img :src="`${ msgItem.message }`" alt="">
-                            </span>
-
-                            <i class="fa-solid fa-chevron-down deleteMsgBtn" @click="toggleMenu(index)"></i>
-
-                            <span class="msgSentTime">
-                                {{ msgItem.newDate.hour }}:{{ msgItem.newDate.minute }}
-                            </span>
-
-                            <div class="menu" :class="(clickedMessageIndex == index) ? ('open') : ('')">
+                            <nav class="navbar">
                                 <ul>
                                     <li>
-                                        <button>Info messaggio</button>
+                                        <button><i class="fa-solid fa-circle-notch"></i></button>
                                     </li>
-                                    
+
                                     <li>
-                                        <button @click="deleteMsg(currentContact.messages, index)">Elimina messaggio</button>
+                                        <button><i class="fa-solid fa-message"></i></button>
+                                    </li>
+
+                                    <li>
+                                        <button @click="settingsMenuOpen = !settingsMenuOpen"><i class="fa-solid fa-ellipsis-vertical"></i></button>
                                     </li>
                                 </ul>
-                            </div>
-                        </span>
-                        
-                    </div> <!-- /chatContent-->
+
+                                <div class="menu" :class="(settingsMenuOpen) ? ('open') : ('')">
+                                    <ul>
+                                        <li>
+                                            <button id="colorModeBtn" @click="isDarkMode = !isDarkMode">
+                                                <span class="container">
+                                                    <span :class="(!isDarkMode) ? ('active') : ('')">
+                                                        <i class="fa-regular fa-sun" v-if="isDarkMode"></i>
+                                                        <i class="fa-solid fa-sun" v-else></i>
+                                                    </span>
+                                                    <span :class="(isDarkMode) ? ('active') : ('')">
+                                                        <i class="fa-solid fa-moon" v-if="isDarkMode"></i>
+                                                        <i class="fa-regular fa-moon" v-else></i>
+                                                    </span>
+                                                </span>
+                                            </button>
+                                        </li>
+                                        
+                                        <li>
+                                            <button>Impostazioni</button>
+                                        </li>
+                                    </ul>
+                                </div> <!-- /menu-->
+                            </nav> <!-- /navbar-->
+
+                        </div> <!-- /sidebarHeader-->
 
 
-                    <div class="chatInput">
+                        <div class="notificationsBanner">
 
-                        <button><i class="fa-regular fa-face-smile"></i></button>
+                            <span class="iconContainer">
+                                <i class="fa-solid fa-bell-slash"></i>
+                            </span> <!-- /iconContainer-->
 
-                        <input v-model="currentMessage" type="text" placeholder="Scrivi un messaggio" @keyup.enter="sendMessage()">
+                            <div class="textContainer">
+                                <span>Ricevi notifiche di nuovi messaggi</span>
+                                <button>Attiva notifiche per desktop</button>
+                            </div> <!-- /textContainer-->
 
-                        <button><i class="fa-solid fa-microphone"></i></button>
+                        </div> <!-- /notificationsBanner-->
 
-                    </div> <!-- /chatInput-->
 
-                </div> <!-- /chatPanel open-->
+                        <div class="searchBarContainer">
 
-                <div class="chatPanel closed" v-else>
-                    <img src="../img/backgroundAlternative.webp" alt="Boolzapp Web">
-                    <h2>Inizia una nuova chat</h2>
+                            <div class="searchBar">
 
-                    <span>&copy; Boolzapp by <a href="https://boolean.careers/?utm_source=google&utm_campaign=it_search_brand&utm_medium=cpc&utm_content=boolean&utm_term=boolean&gclid=Cj0KCQiAw8OeBhCeARIsAGxWtUw71qmxDcKDsey5QZnsXbqz4NKObg4xnGRxBdYL7k1toBH3SGULVAYaAg8_EALw_wcB">Boolean</a></span>
-                </div> <!-- /chatPanel closed-->
+                                <span><i class="fa-solid fa-magnifying-glass"></i></span>
 
-                <div class="overlay" v-if="clickedMessageIndex != -1" @click="clickedMessageIndex = -1"></div>
+                                <input v-model="searchBarInput" type="text" placeholder="Cerca o inizia una nuova chat">
 
-            </main>
+                            </div> <!-- /searchBar-->
+
+                        </div> <!-- /searchBarContainer-->
+
+
+                        <div class="chatList">
+                            <ul>
+
+                                <li v-for="(contact, index) in contacts" 
+                                    @click="openChat(contact, index), hideSidebar = true, clickedMessageIndex = -1" 
+                                    :class="(index == currentChatIndex) ? ('active') : ('')" 
+                                    v-show="showOnSearchBar(contact)">
+
+                                    <div class="iconContainer">
+
+                                        <div class="userPicture">
+                                            <img :alt="`${contact.name}`" :src="`../img/avatar${contact.avatar}.jpg`">
+                                        </div> <!-- /userPicture-->
+
+                                    </div> <!-- /iconContainer-->
+
+                                    <div class="chatInfo">
+
+                                        <h4 class="contactName">{{ contact.name }}</h4>
+
+                                        <span class="lastMsgPreview">
+                                            {{ getLastMsg(contact) }}
+                                        </span>
+
+                                    </div> <!-- /chatInfo-->
+
+                                    <div class="lastMsgTime">
+                                        {{ getLastMsgTime(contact.messages, "any") }}
+                                    </div> <!-- /lastMsgTime-->
+
+                                </li> <!-- / elemento lista contatti-->
+
+                            </ul>
+                        </div> <!-- /chatList-->
+
+                    </div> <!-- /sidebar-->
+
+
+                    <div class="chatPanel open"  v-if="currentChatIndex != -1">
+
+                        <header class="chatHeader">
+
+                            <div class="container">
+
+                                <span id="backBtn" @click="hideSidebar = false, currentChatIndex = -1">
+                                    <i class="fa-solid fa-chevron-left"></i>
+                                </span>
+
+                                <div class="headerChatInfo">
+
+                                    <a href="">
+                                        <div class="userPicture">
+                                            <img :alt="`${currentContact.name}`" :src="`../img/avatar${currentContact.avatar}.jpg`">
+                                        </div> <!-- /userPicture-->
+                
+                                        <div class="chatInfo">
+        
+                                            <h4 class="contactName">{{ currentContact.name }}</h4>
+        
+                                            <span class="accessStatus">
+                                                <span v-if="(currentChatIndex != -1) && (!isOnline)">
+                                                    Ultimo accesso oggi alle {{ getLastMsgTime(currentContact.messages, "received") }}
+                                                </span>
+                                                
+                                                <span v-else>
+                                                    {{ isOnlineMsg }}
+                                                </span>
+                                            </span> <!-- /accessStatus-->
+        
+                                        </div> <!-- /chatInfo-->
+                                    </a>
+        
+                                </div> <!-- /chatHeaderInfo-->
+
+                            </div> <!-- /container-->
+
+                            <nav class="navbar">
+                                <ul>
+                                    <li>
+                                        <input v-model="searchMsgInput" type="text" v-if="showMsgSearch" class="msgSearchbar" placeholder="Cerca messaggi" ref="msgSearchInput">
+                                        <button 
+                                            id="msgSearchBtn"
+                                            @click="(showMsgSearch = !showMsgSearch), searchMsgInput = ''"
+                                            :class="(showMsgSearch) ? ('active') : ('')">
+                                            <i class="fa-solid fa-magnifying-glass"></i>
+                                        </button>
+                                    </li>
+
+                                    <li>
+                                        <button id="attachBtn">
+                                            <label for="attach">
+                                                <i class="fa-solid fa-paperclip"></i>
+                                            </label>
+                                        </button> 
+                                        <input @change="getAttachment" type="file" id="attach" name="attach">
+                                    </li>
+
+                                    <li>
+                                        <button><i class="fa-solid fa-ellipsis-vertical"></i></button> 
+                                    </li>
+                                </ul>
+                            </nav> <!-- /navbar-->
+
+                        </header> <!-- /chatHeader-->
+
+
+                        <div class="chatContent" ref="messagesContainer">
+
+                            <span class="message" v-for="(msgItem, index) in currentContact.messages" 
+                                :class="[
+                                            msgItem.status,
+                                            (msgSearch(msgItem)) ? ('found') : ('')
+                                        ]">
+
+                                <span class="messageText" v-if="!msgItem.isAttachment">
+                                    {{ msgItem.message }}
+                                </span>
+                                <span class="attachment" v-else>
+                                    <img :src="`${ msgItem.message }`" alt="">
+                                </span>
+
+                                <i class="fa-solid fa-chevron-down deleteMsgBtn" @click="toggleMenu(index)"></i>
+
+                                <span class="msgSentTime">
+                                    {{ msgItem.newDate.hour }}:{{ msgItem.newDate.minute }}
+                                </span>
+
+                                <div class="menu" :class="(clickedMessageIndex == index) ? ('open') : ('')">
+                                    <ul>
+                                        <li>
+                                            <button>Info messaggio</button>
+                                        </li>
+                                        
+                                        <li>
+                                            <button @click="deleteMsg(currentContact.messages, index)">Elimina messaggio</button>
+                                        </li>
+                                    </ul>
+                                </div> <!-- /menu-->
+                            </span>
+                            
+                        </div> <!-- /chatContent-->
+
+
+                        <div class="chatInput">
+
+                            <button><i class="fa-regular fa-face-smile"></i></button>
+
+                            <input v-model="currentMessage" type="text" placeholder="Scrivi un messaggio" @keyup.enter="sendMessage()">
+
+                            <button><i class="fa-solid fa-microphone"></i></button>
+
+                        </div> <!-- /chatInput-->
+
+                    </div> <!-- /chatPanel open-->
+
+                    <div class="chatPanel closed" v-else>
+                        <img src="../img/backgroundAlternative.webp" alt="Boolzapp Web">
+                        <h2>Inizia una nuova chat</h2>
+
+                        <span>&copy; Boolzapp by <a href="https://boolean.careers/?utm_source=google&utm_campaign=it_search_brand&utm_medium=cpc&utm_content=boolean&utm_term=boolean&gclid=Cj0KCQiAw8OeBhCeARIsAGxWtUw71qmxDcKDsey5QZnsXbqz4NKObg4xnGRxBdYL7k1toBH3SGULVAYaAg8_EALw_wcB">Boolean</a></span>
+                    </div> <!-- /chatPanel closed-->
+
+                    <div class="overlay" v-if="(clickedMessageIndex != -1) || (settingsMenuOpen)" @click="(clickedMessageIndex = -1), (settingsMenuOpen = false)"></div>
+
+                </main>
+            </div> <!-- /container-->
         </div> <!-- /app-->
     </div> <!-- /wrapper-->
     

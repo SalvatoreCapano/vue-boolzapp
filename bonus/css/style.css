@@ -20,20 +20,37 @@ body {
     --mySecondaryColor: #009688;
     --sentMsg: #d5f9ba;
     --receivedMsg: #fdfdfd;
+    --searchbarBg: #ffffff;
+    --myThirdColor: #f3f3f3;
+
+    --mainTextColor: #000000;
+    --secondaryTextColor: #ffffff;
+
+    --myBtnColor: #606060;
+
+    --myLightBorderColor: #e1e1e1;
+    --myDarkBorderColor: #c8c8c8;
+
+    --myHoverColor: #e6e6e6;
+    --myActiveColor: #dcdcdc;
 }
 
 /* REGOLE GENERALI */
 .wrapper {
+    height: 100vh;
+}
+
+#app {
+    height: 100%;
+}
+
+#app > .container {
     height: 100vh;
 
     background-image: url("../../img/mainBackground.png");
     background-size: cover;
 
     padding: 2.5rem 0;
-}
-
-#app {
-    height: 100%;
 }
 
 .overlay {
@@ -58,6 +75,47 @@ body {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.menu {
+    position: absolute;
+    bottom: -95px;
+
+    width: 150px;
+
+    padding: 5px 0;
+    box-shadow: 0px 5px 15px 3px #00000040;
+    background-color: white;
+    
+    z-index: 30;
+
+    display: none;
+}
+
+.menu.open {
+    display: block;
+}
+
+.menu ul {
+    list-style: none;
+}
+
+.menu ul li button {
+    display: inline-block;
+    width: 100%;
+    height: 40px;
+
+    text-align: left;
+    padding: 0 8px;
+
+    background: none;
+    border: none;
+
+    cursor: pointer;
+}
+
+.menu ul li button:hover {
+    background-color: rgb(230, 230, 230);
 }
 
 /* MAIN */
@@ -137,7 +195,7 @@ main > .chatPanel.closed {
     overflow-y: auto;
     overflow-x: hidden;
 
-    background-color: #f3f3f3;
+    background-color: var(--myThirdColor);
 }
 
 /* CHAT PANEL */
@@ -181,11 +239,12 @@ main > .chatPanel.closed {
 }
 
 .chatPanel.closed h2 {
-    color: rgb(15, 15, 15);
+    color: var(--mainTextColor);
     margin-bottom: auto;
 }
 
 .chatPanel.closed span {
+    color: var(--mainTextColor);
     font-size: 0.9rem;
     margin-top: auto;
     margin-bottom: 1rem;
@@ -202,31 +261,70 @@ main > .chatPanel.closed {
     gap: 0.75rem;
 
     text-decoration: none;
-    color: black;
+    color: var(--mainTextColor);
+}
+
+.sidebar .sidebarHeader .navbar {
+    position: relative;
+}
+.sidebar .sidebarHeader .menu {
+    right: 0;
+
+    bottom: -130px;
 }
 
 /* Regole applicate anche alle icone nell'header della chat */
-.navbar ul {
+.navbar > ul {
     list-style: none;
 
     display: flex;
     gap: 0.6rem;
 }
 
-.navbar ul li button {
+.navbar > ul li button {
     background: none;
     border: none;
     
     font-size: 1.25rem;
-    color: #595959;
+    color: var(--myBtnColor);
     
     padding: 5px 8px;
     cursor: pointer;
     transition: color 0.05s;
 }
 
-.navbar ul li:hover button{
+.navbar > ul li:hover button{
     color: gray;
+}
+
+.sidebar #colorModeBtn .container {
+    display: inline-block;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: fit-content;
+
+    padding: 2px;
+
+    border-radius: 24px;
+
+    border: 1px solid gray;
+}
+
+.sidebar #colorModeBtn .container span {
+    display: inline-block;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+
+    text-align: center;
+    line-height: 26px;
+}
+
+.sidebar #colorModeBtn .container span.active{
+    background-color: #10101080;
 }
 
 /* SIDEBAR 2/4 */
@@ -256,7 +354,7 @@ main > .chatPanel.closed {
     border: none;
 
     font-size: 0.8rem;
-    color: gray;
+    color: var(--myBtnColor);
     text-decoration: underline;
 
     cursor: pointer;
@@ -268,8 +366,8 @@ main > .chatPanel.closed {
     align-items: center;
     
     border-radius: 6px;
-    border: 1px solid #e1e1e1;
-    background-color: white;
+    border: 1px solid var(--myLightBorderColor);
+    background-color: var(--searchbarBg);
 }
 
 .sidebar .searchBarContainer .searchBar span {
@@ -282,8 +380,10 @@ main > .chatPanel.closed {
     padding: 8px 3px;
     flex-grow: 1;
 
+    color: var(--myBtnColor);
     background: none;
     border: none;
+    background-color: var(--searchbarBg);
 }
 
 .sidebar .searchBarContainer .searchBar input:focus {
@@ -301,7 +401,7 @@ main > .chatPanel.closed {
     height: 80px;
     
     padding: 0.4rem 0.4rem 0.4rem 0.6rem;
-    border-bottom: 1px solid rgb(200, 200, 200);
+    border-bottom: 1px solid var(--myDarkBorderColor);
 
     display: flex;
     align-items: center;
@@ -316,11 +416,11 @@ main > .chatPanel.closed {
 
 .sidebar .chatList ul li:hover,
 .sidebar .chatList ul li.active:hover {
-    background-color: rgb(230, 230, 230);
+    background-color: var(--myHoverColor);
 }
 
 .sidebar .chatList ul li.active {
-    background-color: rgb(220, 220, 220);
+    background-color: var(--myActiveColor);
 }
 
 .sidebar .chatList ul li .iconContainer {
@@ -337,6 +437,8 @@ main > .chatPanel.closed {
 .sidebar .chatList ul li .chatInfo .contactName {
     font-size: 0.9rem;
     font-weight: 600;
+
+    color: var(--mainTextColor);
 }
 
 .sidebar .chatList ul li .chatInfo .lastMsgPreview {
@@ -394,7 +496,7 @@ main > .chatPanel.closed {
 }
 
 .chatPanel .chatHeader .headerChatInfo .chatInfo h4 {
-    color: black;
+    color: var(--mainTextColor);
 }
 
 .chatPanel .chatHeader .headerChatInfo .chatInfo .accessStatus {
@@ -405,9 +507,11 @@ main > .chatPanel.closed {
 .chatPanel .chatHeader .msgSearchbar {
     padding: 3px 10px;
 
+    color: var(--mainTextColor);
+
     border-radius: 6px;
-    border: 1px solid #e1e1e1;
-    background-color: white;
+    border: 1px solid var(--myLightBorderColor);
+    background-color: var(--searchbarBg);
 }
 
 .chatPanel .chatHeader .msgSearchbar:focus {
@@ -431,6 +535,8 @@ main > .chatPanel.closed {
     max-width: 450px;
     padding: 12px 20px 22px;
     border-radius: 10px;
+
+    color: var(--mainTextColor);
 
     display: flex;
     align-items: center;
@@ -505,53 +611,12 @@ main > .chatPanel.closed {
 }
 
 /* Menu Elimina messaggio */
-.message .menu {
-    position: absolute;
-    bottom: -95px;
-
-    width: 150px;
-
-    padding: 5px 0;
-    box-shadow: 0px 5px 15px 3px #00000040;
-    background-color: white;
-    
-    z-index: 30;
-
-    display: none;
-}
-
-.message .menu.open {
-    display: block;
-}
-
 .message.sent .menu {
     right: 20px;
 }
 
 .message.received .menu {
     left: 20px;
-}
-
-.message .menu ul {
-    list-style: none;
-}
-
-.message .menu ul li button {
-    display: inline-block;
-    width: 100%;
-    height: 40px;
-
-    text-align: left;
-    padding: 0 8px;
-
-    background: none;
-    border: none;
-
-    cursor: pointer;
-}
-
-.message .menu ul li button:hover {
-    background-color: rgb(230, 230, 230);
 }
 
 /* CHAT PANEL 3/3 */
@@ -561,6 +626,7 @@ main > .chatPanel.closed {
     align-items: center;
     gap: 16px;
 
+    
     border-left: 2px solid var(--myMainColorDark);
 
     padding: 10px 16px;
@@ -570,7 +636,7 @@ main > .chatPanel.closed {
     padding: 0.6rem 0.9rem;
 
     font-size: 1.6rem;
-    color: rgb(89, 89, 89);
+    color: var(--myBtnColor);
     
     cursor: pointer;
     transition: color 0.05s;
@@ -587,28 +653,19 @@ main > .chatPanel.closed {
     flex-grow: 1;
     height: 100%;
 
+    color: var(--mainTextColor);
+
     padding-left: 1rem;
 
     background: none;
     border: none;
     border-radius: 8px;
-    background-color: white;
+    background-color: var(--searchbarBg);
 }
 
 .chatPanel .chatInput input:focus {
     outline: 2px solid var(--mySecondaryColor);
 }
-
-
-
-
-
-
-
-
-
-
-
 
 /* VERSIONE MOBILE */
 @media screen and (max-width: 960px) {

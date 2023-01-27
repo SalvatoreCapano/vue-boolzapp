@@ -185,7 +185,9 @@ createApp({
             showMsgSearch: false,               //A seconda del valore, la searchbar dei messaggi e' mostrata o meno
             searchMsgInput: "",                 //Messaggio cercato nell'input
             attachmentUrl: undefined,
-            isAttachment: false
+            isAttachment: false,
+            settingsMenuOpen: false,
+            isDarkMode: false
         };
     },
 
@@ -195,7 +197,12 @@ createApp({
 
             if (contact.messages != false) {
                 let lastMsgIndex = contact.messages.length - 1;
-                return contact.messages[lastMsgIndex].message;
+                if (!contact.messages[lastMsgIndex].isAttachment) {
+                    return contact.messages[lastMsgIndex].message;
+                }
+                else {
+                    return "Foto";
+                }
             }
             else {
                 return "";
@@ -365,9 +372,9 @@ createApp({
             if (filteredMsg.includes(stringToSearch)) return true;
         },
         getAttachment(event) {
+            // Genera l'url dell'immagine inserita nell'input 'allegati'
             console.log(event.target.files[0]);
             const attachmentUrl = URL.createObjectURL(event.target.files[0]);
-            console.log(attachmentUrl);
 
             this.addToMessageList(attachmentUrl, "sent", true);
         }

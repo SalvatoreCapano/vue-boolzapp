@@ -1,0 +1,39 @@
+/* :root {
+    --myMainColor: #eaeaea;
+    --myMainColorDark: #cec7c7;
+    --myLightBlue: #8edafc;
+    --mySecondaryColor: #009688;
+    --sentMsg: #d5f9ba;
+    --receivedMsg: #fdfdfd;
+} */
+
+#app > .container.darkMode {
+    --myMainColor: #202c33;
+    --myMainColorDark: #161e23;
+    --myLightBlue: #638493;
+    /* --mySecondaryColor: #009688; */
+    --sentMsg: #005c4b;
+    --receivedMsg: #0b141a;
+    --searchbarBg: #323d44;
+    --myThirdColor: #111b21;
+
+    --mainTextColor: #eeeeee;
+    --secondaryTextColor: #101010;
+
+    --myBtnColor: #999999;
+
+    --myLightBorderColor: #424f57;
+    --myDarkBorderColor: #2b3032;
+
+    --myHoverColor: #1c2b35;
+    --myActiveColor: #23343d;
+
+    background: url("../../img/mainBackgroundDarkMode.png");
+
+}
+
+/* #111b21 */
+
+#app > .container.darkMode  .chatPanel .chatContent {
+    background-image: url("../../img/darkBackground.png");
+}
