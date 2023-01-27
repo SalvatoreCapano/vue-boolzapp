@@ -28,14 +28,14 @@
 
                 <div class="sidebar">
 
-                    <div class="sidebarMenu">
+                    <div class="sidebarHeader">
 
                         <div class="userInfo">
 
                             <a href="">
 
                                 <div class="userPicture">
-                                    <img src="img/avatar_1.jpg" alt="*Your username*">
+                                    <img src="img/avatar_io.jpg" alt="*Your username*">
                                 </div> <!-- /userPicture-->
         
                                 <h4 class="userName">Sofia</h4>
@@ -64,21 +64,21 @@
                                     </a>
                                 </li>
                             </ul>
-                        </nav>
+                        </nav> <!-- /navbar-->
 
-                    </div> <!-- /sidebarMenu-->
+                    </div> <!-- /sidebarHeader-->
 
 
                     <div class="notificationsBanner">
 
-                        <span class="notificationBannerIcon">
+                        <span class="iconContainer">
                             <i class="fa-solid fa-bell-slash"></i>
-                        </span>
+                        </span> <!-- /iconContainer-->
 
                         <div class="textContainer">
                             <span>Ricevi notifiche di nuovi messaggi</span>
                             <button>Attiva notifiche per desktop</button>
-                        </div>
+                        </div> <!-- /textContainer-->
 
                     </div> <!-- /notificationsBanner-->
 
@@ -100,11 +100,15 @@
 
                         <ul>
 
-                            <li v-for="(contact, index) in contacts" @click="openChat(contact, index)" :class="(index == currentActiveChat) ? ('active') : ('')" v-show="showOnSearchBar(contact)">
+                            <li v-for="(contact, index) in contacts"
+                            @click="openChat(contact, index), clickedMessageIndex = -1"
+                            :class="(index == currentChatIndex) ? ('active') : ('')"
+                            v-show="showOnSearchBar(contact)">
+
                                 <div class="iconContainer">
 
                                     <div class="userPicture">
-                                        <img  alt="*Your username*" :src="assembleSrc(index)">
+                                        <img  alt="`${contact.name}`" :src="`img/avatar${contact.avatar}.jpg`">
                                     </div> <!-- /userPicture-->
 
                                 </div> <!-- /iconContainer-->
@@ -121,10 +125,10 @@
                                 </div> <!-- /chatInfo-->
 
 
-                                <div class="timeContainer">
+                                <div class="lastMsgTime">
                                     {{ getLastMsgTime(contact) }}
-                                </div> <!-- /timeContainer-->
-                            </li>
+                                </div> <!-- /lastMsgTime-->
+                            </li> <!-- / elemento lista contatti-->
 
                         </ul>
                         
@@ -133,7 +137,7 @@
                 </div> <!-- /sidebar-->
 
 
-                <div class="chatPanel open"  v-show="currentActiveChat != -1">
+                <div class="chatPanel open"  v-if="currentChatIndex != -1">
 
                     <header class="chatHeader">
 
@@ -142,12 +146,12 @@
                             <a href="">
 
                                 <div class="userPicture">
-                                    <img src="img/avatar_1.jpg" alt="Nome utente">
+                                    <img :alt="`${currentContact.name}`" :src="`img/avatar${currentContact.avatar}.jpg`">
                                 </div> <!-- /userPicture-->
         
                                 <div class="chatInfo">
 
-                                    <h4 class="contactName">Michele</h4>
+                                    <h4 class="contactName">{{ currentContact.name }}</h4>
 
                                     <span class="lastAccess">
                                         Ultimo accesso oggi alle 12.30
@@ -162,21 +166,15 @@
                         <nav class="navbar">
                             <ul>
                                 <li>
-                                    <a href="#">
-                                        <button><i class="fa-solid fa-magnifying-glass"></i></button>
-                                    </a>
+                                    <button><i class="fa-solid fa-magnifying-glass"></i></button>
                                 </li>
 
                                 <li>
-                                    <a href="#">
-                                        <button><i class="fa-solid fa-paperclip"></i></i></button>
-                                    </a>
+                                    <button><i class="fa-solid fa-paperclip"></i></i></button>
                                 </li>
 
                                 <li>
-                                    <a href="#">
-                                        <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
-                                    </a>
+                                    <button><i class="fa-solid fa-ellipsis-vertical"></i></button>
                                 </li>
                             </ul>
                         </nav>
@@ -184,28 +182,32 @@
                     </header> <!-- /chatHeader-->
 
 
-                    <div class="chatContent" ref="messagesContainer">
+                    <div class="chatContent">
 
-                        <span class="message" v-for="(currentMessage, index, array) in currentMessagesList" :class="(checkMsgStatus(currentMessage)) ? ('sent') : ('received')">
-                            {{ currentMessage.message }}
+                        <span class="message" v-for="(msgItem, index) in currentContact.messages" :class=" msgItem.status">
+
+                            <span class="messageText" v-if="!msgItem.isAttachment">
+                                {{ msgItem.message }}
+                            </span>
+
                             <i class="fa-solid fa-chevron-down deleteMsgBtn" @click="toggleMenu(index)"></i>
 
                             <span class="msgSentTime">
-                                {{ currentMessage.newDate.hour }}:{{ currentMessage.newDate.minute }}
+                                {{ msgItem.newDate.hour }}:{{ msgItem.newDate.minute }}
                             </span>
 
-                            <div class="menu" :class="(clickedMessage == index) ? ('open') : ('')">
+                            <div class="menu" :class="(clickedMessageIndex == index) ? ('open') : ('')">
                                 <ul>
                                     <li>
                                         <button>Info messaggio</button>
                                     </li>
                                     
                                     <li>
-                                        <button @click="deleteMsg(currentMessagesList, index)">Elimina messaggio</button>
+                                        <button @click="deleteMsg(currentContact.messages, index)">Elimina messaggio</button>
                                     </li>
                                 </ul>
-                            </div>
-                        </span>
+                            </div> <!-- /menu-->
+                        </span> <!-- /message-->
                         
                     </div> <!-- /chatContent-->
 
@@ -222,8 +224,8 @@
 
                 </div> <!-- /chatPanel open-->
 
-                <div class="chatPanel closed" v-show="currentActiveChat == -1">
-                    <img src="img/backgroundAlternative.webp" alt="">
+                <div class="chatPanel closed" v-else>
+                    <img src="img/backgroundAlternative.webp" alt="Boolzapp Web">
                     <h2>Start a new chat</h2>
 
                     <span>&copy; Boolzapp by <a href="https://boolean.careers/?utm_source=google&utm_campaign=it_search_brand&utm_medium=cpc&utm_content=boolean&utm_term=boolean&gclid=Cj0KCQiAw8OeBhCeARIsAGxWtUw71qmxDcKDsey5QZnsXbqz4NKObg4xnGRxBdYL7k1toBH3SGULVAYaAg8_EALw_wcB">Boolean</a></span>

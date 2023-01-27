@@ -170,21 +170,23 @@ createApp({
                 }
                 ],
             currentMessagesList: 0,
-            currentActiveChat: -1,
+            currentChatIndex: -1,
             currentMessage: "",
             searchBarInput: "",
             menuOpen: false,
-            clickedMessage: -1
+            clickedMessageIndex: -1
         };
     },
 
     methods: {
-        assembleSrc(i) {
-            return `img/avatar${this.contacts[i].avatar}.jpg`;
-        },
         getLastMsg (contact) {
-            let lastMsgIndex = contact.messages.length - 1;
-            return contact.messages[lastMsgIndex].message;
+            if (contact.messages != false) {
+                let lastMsgIndex = contact.messages.length - 1;
+                return contact.messages[lastMsgIndex].message;
+            }
+            else {
+                return "";
+            }
         },
         deconstructDate () {
             this.contacts.forEach(contact => {
@@ -212,46 +214,35 @@ createApp({
             return `${contact.messages[lastMsgIndex].newDate.hour}:${contact.messages[lastMsgIndex].newDate.minute}`
         },
         openChat (contact, i) {
-            this.currentMessagesList = contact.messages;
+            this.currentContact = contact;
 
-            this.currentActiveChat = i;
+            this.currentChatIndex = i;
         },
-        checkMsgStatus(msg) {
-            if (msg.status == "sent") return true;
-            else return false;
-        }, 
-        getResponse() {
+        addToMessageList (message, status) {
+            // Aggiunge un messaggio all'array dei messaggi
             const date = new Date();
-            this.currentMessagesList.push(
+            this.currentContact.messages.push(
                 {
-                    message: "OK!",
-                    status: 'received',
+                    message: message,
+                    status: status,
                     newDate: {
                         second: date.getSeconds(),
                         minute: date.getMinutes(),
-                        hour: date.getHours()
+                        hour: date.getHours(),
+                        day: date.getDay(),
+                        month: date.getMonth(),
+                        year: date.getFullYear()
                     }
                 }
             );
-            this.setScrollDown ();
+        },
+        getResponse() {
+            this.addToMessageList("OK!", "received");
         },
         sendMessage() {
-            const date = new Date();
-            this.currentMessagesList.push(
-                {
-                    date: '10/01/2020 15:51:00',
-                    message: this.currentMessage,
-                    status: 'sent',
-                    newDate: {
-                        second: date.getSeconds(),
-                        minute: date.getMinutes(),
-                        hour: date.getHours()
-                    }
-                }
-            );
+            this.addToMessageList(this.currentMessage, "sent");
             this.currentMessage = "";
 
-            this.setScrollDown ();
             setTimeout(this.getResponse, 1000);
         },
         showOnSearchBar(contact) {
@@ -259,25 +250,17 @@ createApp({
         },
         toggleMenu(i) {
 
-            if (this.clickedMessage == i) {
-                this.clickedMessage = -1;
+            if (this.clickedMessageIndex == i) {
+                this.clickedMessageIndex = -1;
             }
             else {
-                this.clickedMessage = i;
+                this.clickedMessageIndex = i;
             }
         },
         deleteMsg(array, i) {
             array.splice(i, 1);
-            this.clickedMessage = -1;
+            this.clickedMessageIndex = -1;
         },
-        setScrollDown() {
-            let chatContent = this.$refs.messagesContainer;
-
-            setTimeout(function(){
-                chatContent.scroll({ top: (chatContent.scrollHeight + 200), behavior: "smooth"})
-
-            }, 5)
-        }
     },
     
     beforeMount () {
