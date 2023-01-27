@@ -183,7 +183,9 @@ createApp({
             isOnlineMsg: "Online",              // Puo' essere 'Online' o 'Sta scrivendo...'
             hideSidebar: false,                 //A seconda del valore, la sidebar viene nascosta o meno
             showMsgSearch: false,               //A seconda del valore, la searchbar dei messaggi e' mostrata o meno
-            searchMsgInput: ""                  //Messaggio cercato nell'input
+            searchMsgInput: "",                 //Messaggio cercato nell'input
+            attachmentUrl: undefined,
+            isAttachment: false
         };
     },
 
@@ -267,13 +269,14 @@ createApp({
 
             this.currentChatIndex = i;
         },
-        addToMessageList (message, status) {
+        addToMessageList (message, status, attachment) {
             // Aggiunge un messaggio all'array dei messaggi
             const date = new Date();
             this.currentContact.messages.push(
                 {
                     message: message,
                     status: status,
+                    isAttachment: attachment,
                     newDate: {
                         second: date.getSeconds(),
                         minute: date.getMinutes(),
@@ -300,7 +303,7 @@ createApp({
 
             setTimeout(function() {
                 self.isOnlineMsg = "Online";
-                self.addToMessageList("OK!", "received");
+                self.addToMessageList("OK!", "received", false);
                 self.setScrollDown ();
 
                 setTimeout(function() {
@@ -313,7 +316,7 @@ createApp({
         sendMessage() {
             // Aggiunge il testo dell'input e l'orario attuale all'array dei messaggi
 
-            this.addToMessageList(this.currentMessage, "sent");
+            this.addToMessageList(this.currentMessage, "sent", false);
             this.currentMessage = "";
 
             this.setScrollDown ();
@@ -360,6 +363,13 @@ createApp({
             filteredMsg = filteredMsg.filter(word => word != "");
 
             if (filteredMsg.includes(stringToSearch)) return true;
+        },
+        getAttachment(event) {
+            console.log(event.target.files[0]);
+            const attachmentUrl = URL.createObjectURL(event.target.files[0]);
+            console.log(attachmentUrl);
+
+            this.addToMessageList(attachmentUrl, "sent", true);
         }
     },
     

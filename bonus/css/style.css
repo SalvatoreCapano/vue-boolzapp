@@ -36,6 +36,16 @@ body {
     height: 100%;
 }
 
+.overlay {
+    width: 100%;
+    height: 100vh;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
+}
+
 .userPicture {
     width: 55px;
     height: 55px;
@@ -408,6 +418,14 @@ main > .chatPanel.closed {
     color: var(--mySecondaryColor);
 }
 
+.chatPanel .chatHeader #attach {
+    display: none;
+}
+
+.chatPanel .chatHeader #attachBtn label {
+    cursor: pointer;
+}
+
 /* CHAT PANEL 2/3 */
 .chatPanel .chatContent .message {
     max-width: 450px;
@@ -474,6 +492,16 @@ main > .chatPanel.closed {
     font-size: 0.7rem;
     color: gray;
     cursor: pointer;
+}
+
+.message .attachment {
+    max-width: 300px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.message .attachment img {
+    width: 100%;
 }
 
 /* Menu Elimina messaggio */

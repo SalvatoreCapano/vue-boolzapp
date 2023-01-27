@@ -177,7 +177,12 @@
                                 </li>
 
                                 <li>
-                                    <button><i class="fa-solid fa-paperclip"></i></i></button> 
+                                    <button id="attachBtn">
+                                        <label for="attach">
+                                            <i class="fa-solid fa-paperclip"></i>
+                                        </label>
+                                    </button> 
+                                    <input @change="getAttachment" type="file" id="attach" name="attach">
                                 </li>
 
                                 <li>
@@ -197,8 +202,11 @@
                                         (msgSearch(msgItem)) ? ('found') : ('')
                                     ]">
 
-                            <span class="messageText">
+                            <span class="messageText" v-if="!msgItem.isAttachment">
                                 {{ msgItem.message }}
+                            </span>
+                            <span class="attachment" v-else>
+                                <img :src="`${ msgItem.message }`" alt="">
                             </span>
 
                             <i class="fa-solid fa-chevron-down deleteMsgBtn" @click="toggleMenu(index)"></i>
@@ -241,6 +249,8 @@
 
                     <span>&copy; Boolzapp by <a href="https://boolean.careers/?utm_source=google&utm_campaign=it_search_brand&utm_medium=cpc&utm_content=boolean&utm_term=boolean&gclid=Cj0KCQiAw8OeBhCeARIsAGxWtUw71qmxDcKDsey5QZnsXbqz4NKObg4xnGRxBdYL7k1toBH3SGULVAYaAg8_EALw_wcB">Boolean</a></span>
                 </div> <!-- /chatPanel closed-->
+
+                <div class="overlay" v-if="clickedMessageIndex != -1" @click="clickedMessageIndex = -1"></div>
 
             </main>
         </div> <!-- /app-->
