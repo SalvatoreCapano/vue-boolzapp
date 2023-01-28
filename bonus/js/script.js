@@ -377,6 +377,10 @@ createApp({
             const attachmentUrl = URL.createObjectURL(event.target.files[0]);
 
             this.addToMessageList(attachmentUrl, "sent", true);
+            this.setScrollDown();
+
+            this.addToMessageList("../../img/cat.jpg", "received", true);
+            this.setScrollDown()
         }
     },
     

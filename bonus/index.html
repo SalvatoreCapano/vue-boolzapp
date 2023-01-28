@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <title>Boolzapp Premium</title>
 
     <!-- Favicon -->
@@ -63,7 +64,7 @@
                                 <div class="menu" :class="(settingsMenuOpen) ? ('open') : ('')">
                                     <ul>
                                         <li>
-                                            <button id="colorModeBtn" @click="isDarkMode = !isDarkMode">
+                                            <button id="colorModeBtn" @click="isDarkMode = !isDarkMode, settingsMenuOpen = false">
                                                 <span class="container">
                                                     <span :class="(!isDarkMode) ? ('active') : ('')">
                                                         <i class="fa-regular fa-sun" v-if="isDarkMode"></i>
@@ -74,7 +75,7 @@
                                                         <i class="fa-regular fa-moon" v-else></i>
                                                     </span>
                                                 </span>
-                                            </button>
+                                            </button> <!-- /colorModeBtn-->
                                         </li>
                                         
                                         <li>
@@ -270,7 +271,8 @@
                     </div> <!-- /chatPanel open-->
 
                     <div class="chatPanel closed" v-else>
-                        <img src="../img/backgroundAlternative.webp" alt="Boolzapp Web">
+                        <img src="../img/backgroundAlternative.png" alt="Boolzapp Web" v-if="(!isDarkMode)">
+                        <img src="../img/darkMode/backgroundAlternativeDarkMode.png" alt="Boolzapp Web" v-else>
                         <h2>Inizia una nuova chat</h2>
 
                         <span>&copy; Boolzapp by <a href="https://boolean.careers/?utm_source=google&utm_campaign=it_search_brand&utm_medium=cpc&utm_content=boolean&utm_term=boolean&gclid=Cj0KCQiAw8OeBhCeARIsAGxWtUw71qmxDcKDsey5QZnsXbqz4NKObg4xnGRxBdYL7k1toBH3SGULVAYaAg8_EALw_wcB">Boolean</a></span>

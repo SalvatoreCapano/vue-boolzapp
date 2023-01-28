@@ -28,12 +28,12 @@ permette di cancellare il messaggio selezionato
 ● Visualizzazione ora e ultimo messaggio inviato/ricevuto nella lista dei contatti
 
 <!-- Idee Bonus -->
-- ordina contatti per ultimo messaggio
-- divisione unico messaggio lungo
-- pulsanti funzionanti
+- Ordina contatti per ultimo messaggio
+- Divisione unico messaggio lungo
+- Pulsanti funzionanti
 - Animazione banner notifiche
-- invio emoji
-- correggere ricezione del messaggio se cambio chat prima di riceverlo
+- Invio emoji
+- Correggere ricezione del messaggio se cambio chat prima di riceverlo
     - ..e aggiungere notifica nuovo messaggio
 
 BONUS
