@@ -379,8 +379,10 @@ createApp({
             this.addToMessageList(attachmentUrl, "sent", true);
             this.setScrollDown();
 
-            this.addToMessageList("../../img/cat.jpg", "received", true);
-            this.setScrollDown()
+            setTimeout(() => {
+                this.addToMessageList("../img/cat.jpg", "received", true);
+                this.setScrollDown()
+            }, 1000)
         }
     },
     
